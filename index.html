@@ -367,7 +367,8 @@ function loadStoreCSV(input){
   const reader=new FileReader();
   reader.onload=function(e){
     try{
-      const lines=e.target.result.split('\n');
+      const text=e.target.result.replace(/^\uFEFF/,'');
+      const lines=text.split('\n');
       const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim());
       const codeIdx=headers.indexOf('판매자상품코드'),priceIdx=headers.indexOf('판매가'),saleIdx=headers.indexOf('할인가'),statusIdx=headers.indexOf('판매상태');
       if(codeIdx<0||priceIdx<0){document.getElementById('storeStatus').innerHTML='<span style="color:var(--red)">❌ 필수 열 없음</span>';return}
@@ -416,6 +417,8 @@ function renderPromoBundles(){
     const itemsHtml=b.items.map((it,ii)=>{const sp=it.pc?gsp(it.pc):0;return `<div class="bi"><div class="bih"><span class="bin">상품 ${ii+1}</span>${b.items.length>1?`<button class="brm" onclick="rmPBI(${bi},${ii})">×</button>`:''}</div><div class="sw"><input class="fi fi-sm" id="pb${bi}s${ii}" placeholder="제품 검색..." value="${it.pc?gn(it.pc):''}" oninput="filterPBD(${bi},${ii})" onfocus="openPBD(${bi},${ii})" onkeydown="ddKeyNav(event,'pb${bi}d${ii}')">${it.pc?`<div class="ss">✓ ${gn(it.pc)} — 원가 ${fmt(gc(it.pc))}원${sp?' · 판매가 '+fmt(sp)+'원':''}</div>`:''}<div class="dd" id="pb${bi}d${ii}"></div></div><div><label class="fl" style="font-size:11px">수량</label><input class="fi qi" id="pb${bi}q${ii}" inputmode="numeric" value="${it.q}" oninput="upPBQ(${bi},${ii})" style="font-size:13px"></div></div>`}).join('');
     const cost=b.items.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);
     const cnt=b.items.reduce((s,i)=>s+(i.q||0),0);
+    const spTot=b.items.reduce((s,i)=>s+gsp(i.pc)*(i.q||0),0);
+    const hpTot=b.items.reduce((s,i)=>s+ghp(i.pc)*(i.q||0),0);
     const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm');
     let dp=0,pf=0,mg=0,resHtml='';
     if(cost>0&&b.price>0){
@@ -428,7 +431,7 @@ function renderPromoBundles(){
     let actHtml='';
     if(b.actual_qty>0&&b.goal_qty>0){const ach=(b.actual_qty/b.goal_qty)*100,achC=ach>=100?'var(--grn)':ach>=70?'var(--ylw)':'var(--red)',aR=dp*b.actual_qty,aP=pf*b.actual_qty;actHtml=`<div style="margin-top:8px"><div class="mbh"><span>달성률</span><span style="color:${achC};font-weight:700">${pct(ach)}</span></div><div class="achieve-track"><div class="achieve-fill" style="width:${Math.min(ach,100)}%;background:${achC}"></div><div class="achieve-label">${fmt(b.actual_qty)}/${fmt(b.goal_qty)}</div></div><div class="rg" style="margin-top:8px"><div class="rb"><div class="rbl">실적 매출</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(aR)}원</div></div><div class="rb"><div class="rbl">실적 이익</div><div class="rbv rbv-sm" style="color:${aP>=0?'var(--grn)':'var(--red)'}">${fmt(aP)}원</div></div></div></div>`}
     return `<div class="bundle-card"><div class="bundle-card-hdr"><input value="${b.name}" onchange="promoBundles[${bi}].name=this.value" placeholder="번들 이름">${promoBundles.length>1?`<button class="brm" onclick="rmPromoBundle(${bi})" style="font-size:18px" title="번들 삭제">×</button>`:''}</div>
-    <div>${itemsHtml}<button class="bab" onclick="addPBI(${bi})" style="margin-bottom:10px">+ 상품 추가</button>${cost>0?`<div class="bsm"><div class="bsr"><span>원가 합계 (${cnt}개)</span><span style="font-weight:700;font-family:monospace">${fmt(cost)}원</span></div></div>`:''}</div>
+    <div>${itemsHtml}<button class="bab" onclick="addPBI(${bi})" style="margin-bottom:10px">+ 상품 추가</button>${cost>0?`<div class="bsm"><div class="bsr"><span>원가 합계 (${cnt}개)</span><span style="font-weight:700;font-family:monospace">${fmt(cost)}원</span></div>${spTot?`<div class="bsr" style="margin-top:4px;font-size:11px"><span>개별 판매가 합계</span><span>${fmt(spTot)}원</span></div>`:''}${hpTot&&hpTot!==spTot?`<div class="bsr" style="margin-top:2px;font-size:11px"><span>개별 할인가 합계</span><span style="color:var(--ac)">${fmt(hpTot)}원</span></div>`:''}</div>`:''}</div>
     <div class="row" style="margin-top:10px"><div><div class="fg"><label class="fl">판매가</label><div class="fr"><input class="fi" id="pbPr${bi}" inputmode="decimal" value="${b.price||''}" placeholder="판매가" oninput="promoBundles[${bi}].price=parseFloat(this.value)||0;renderPromoBundles()"><span class="fs">원</span></div></div><div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="pbDc${bi}" inputmode="decimal" value="${b.discount||''}" placeholder="0" oninput="promoBundles[${bi}].discount=parseFloat(this.value)||0;renderPromoBundles()"><span class="fs">%</span></div></div></div><div><div class="fg"><label class="fl">목표 수량</label><div class="fr"><input class="fi" id="pbGq${bi}" inputmode="numeric" value="${b.goal_qty||''}" placeholder="예: 100" oninput="promoBundles[${bi}].goal_qty=parseInt(this.value)||0;renderPromoBundles()"><span class="fs">개</span></div></div><div class="fg"><label class="fl">실적 수량</label><div class="fr"><input class="fi" id="pbAq${bi}" inputmode="numeric" value="${b.actual_qty||''}" placeholder="0" oninput="promoBundles[${bi}].actual_qty=parseInt(this.value)||0;renderPromoBundles()"><span class="fs">개</span></div></div></div></div>
     ${resHtml}${goalHtml}${actHtml}</div>`;
   }).join('');
