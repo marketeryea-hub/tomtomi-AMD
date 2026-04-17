@@ -7,43 +7,51 @@
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root{--bg:#0f0f23;--card:#1a1a2e;--inp:#0f0f23;--bdr:#2a2a4a;--txt:#e2e8f0;--dim:#94a3b8;--faint:#64748b;--ghost:#475569;--ac:#7c3aed;--acl:#a78bfa;--acs:#c4b5fd;--acd:#4c1d95;--grn:#34d399;--ylw:#fbbf24;--org:#fb923c;--red:#f87171;--reds:#fca5a5}
+:root{
+  --bg:#faf8f5;--card:#ffffff;--inp:#f5f2ee;--bdr:#e8e0d8;
+  --txt:#2d2a26;--dim:#7a746c;--faint:#9e978e;--ghost:#b8b0a6;
+  --ac:#e07a3a;--acl:#f09a5e;--acs:#c45e1a;--acd:#fff5ee;
+  --grn:#2e8b57;--ylw:#d4a017;--org:#e07a3a;--red:#c94040;--reds:#e06060
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;min-height:100vh;padding:20px 16px 40px;max-width:480px;margin:0 auto}
-.hdr{text-align:center;margin-bottom:20px}
-.hdr h1{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--acl),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hdr p{font-size:11px;color:var(--faint);margin-top:4px}
-.tabs{display:flex;background:var(--card);border-radius:10px;padding:3px;margin-bottom:14px;border:1px solid var(--bdr)}
-.tabs button{flex:1;padding:9px 0;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--dim);transition:all .2s;font-family:inherit}
+body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;min-height:100vh;padding:24px 32px 48px;max-width:960px;margin:0 auto}
+.hdr{margin-bottom:24px;border-bottom:2px solid var(--bdr);padding-bottom:16px}
+.hdr h1{font-size:24px;font-weight:800;color:var(--acs)}
+.hdr p{font-size:12px;color:var(--faint);margin-top:4px}
+.tabs{display:flex;background:var(--card);border-radius:10px;padding:3px;margin-bottom:16px;border:1px solid var(--bdr)}
+.tabs button{flex:1;padding:10px 0;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:var(--dim);transition:all .2s;font-family:inherit}
 .tabs button.on{background:var(--ac);color:#fff}
-.tabs button.on2{background:var(--acd);color:var(--acs)}
-.cd{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:16px 18px;margin-bottom:14px}
-.cd-r{background:linear-gradient(135deg,var(--card),#16162a);border:1px solid var(--bdr);border-radius:14px;padding:16px 18px;margin-bottom:14px}
-.sl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.tabs button.on2{background:var(--acd);color:var(--acs);border:1px solid var(--ac)}
+.cd{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.cd-r{background:linear-gradient(135deg,#fff9f4,#fff5ee);border:1px solid var(--bdr);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.sl{font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;color:var(--acs)}
 .fg{margin-bottom:12px}.fl{display:block;font-size:12px;color:var(--dim);margin-bottom:4px;font-weight:500}
 .fr{display:flex;align-items:center;gap:6px}
-.fi{flex:1;padding:10px 12px;background:var(--inp);border:1px solid var(--bdr);border-radius:8px;color:var(--txt);font-size:15px;outline:none;font-family:'SF Mono','Menlo',monospace;width:100%}
-.fi::placeholder{color:#334155}.fi:focus{border-color:var(--ac)}
+.fi{flex:1;padding:10px 12px;background:var(--inp);border:1px solid var(--bdr);border-radius:8px;color:var(--txt);font-size:14px;outline:none;font-family:'SF Mono','Menlo',monospace;width:100%}
+.fi::placeholder{color:var(--ghost)}.fi:focus{border-color:var(--ac)}
 .fi-txt{font-family:'Pretendard',sans-serif!important;font-size:13px!important}
 .fi-sm{font-size:13px!important}
 .fs{font-size:13px;color:var(--faint);font-weight:600;min-width:20px}
 .fh{font-size:10px;color:var(--ghost);margin-top:3px}
 .sw{position:relative;margin-bottom:12px}
 .ss{font-size:11px;color:var(--ac);margin-top:3px}
-.dd{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--card);border:1px solid var(--bdr);border-radius:8px;max-height:220px;overflow-y:auto;margin-top:4px;display:none}
+.dd{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--card);border:1px solid var(--bdr);border-radius:8px;max-height:220px;overflow-y:auto;margin-top:4px;display:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .dd.open{display:block}
-.di{padding:8px 12px;cursor:pointer;font-size:12px;color:var(--dim);border-bottom:1px solid #2a2a4a22}
-.di:hover{background:#7c3aed33}
-.dn{font-weight:600}.ds{font-size:10px;color:var(--faint);margin-top:2px}
+.di{padding:8px 12px;cursor:pointer;font-size:12px;color:var(--dim);border-bottom:1px solid #e8e0d822}
+.di:hover{background:var(--acd)}
+.dn{font-weight:600;color:var(--txt)}.ds{font-size:10px;color:var(--faint);margin-top:2px}
 .dp{font-size:10px;color:var(--grn);margin-top:1px}
 .de{padding:10px 12px;font-size:12px;color:var(--faint)}
 .dvr{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .dvl{height:1px;flex:1;background:var(--bdr)}.dvt{font-size:10px;color:var(--faint)}
 .tw{margin-bottom:12px}.tr{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
 .tt{width:40px;height:22px;border-radius:11px;position:relative;transition:background .2s;flex-shrink:0}
-.tm{width:16px;height:16px;border-radius:50%;background:#f1f5f9;position:absolute;top:3px;transition:left .2s}
+.tm{width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .tl{font-size:12px;color:var(--dim);font-weight:500}
 .th{font-size:10px;color:var(--ghost);margin-top:3px;padding-left:50px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.row,.row3{grid-template-columns:1fr}}
 .rg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .rg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
 .rb{background:var(--inp);border-radius:10px;padding:12px 14px}
@@ -58,7 +66,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Go
 .cr{display:flex;justify-content:space-between;margin-bottom:4px}
 .cr.tot{border-top:1px solid var(--bdr);margin-top:6px;padding-top:6px;font-weight:700;margin-bottom:0}
 .cl{color:var(--dim)}.cv{font-family:'SF Mono','Menlo',monospace}
-.wb{margin-top:10px;padding:8px 12px;background:#f8717122;border:1px solid #f8717144;border-radius:8px;font-size:11px;color:var(--reds)}
+.wb{margin-top:10px;padding:8px 12px;background:#c9404022;border:1px solid #c9404044;border-radius:8px;font-size:11px;color:var(--red)}
 .es{text-align:center;padding:36px 20px;color:var(--ghost)}
 .es .ic{font-size:36px;margin-bottom:8px}.es .mg{font-size:13px}
 .bi{margin-bottom:14px;padding:12px;background:var(--inp);border-radius:10px}
@@ -66,145 +74,155 @@ body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Go
 .bin{font-size:11px;color:var(--faint);font-weight:600}
 .brm{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:0;line-height:1}
 .bab{width:100%;padding:10px;border:1px dashed var(--bdr);border-radius:8px;background:transparent;color:var(--ac);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
-.bsm{margin-top:12px;padding:10px 12px;background:#7c3aed22;border-radius:8px;font-size:12px}
+.bab:hover{background:var(--acd)}
+.bsm{margin-top:12px;padding:10px 12px;background:var(--acd);border-radius:8px;font-size:12px}
 .bsr{display:flex;justify-content:space-between;color:var(--acs)}
 .stg{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
 .sta{font-size:16px;color:var(--ghost);transition:transform .2s}
 .qi{width:80px}
-.ft{text-align:center;font-size:10px;color:var(--bdr);margin-top:16px}
-.ai-btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--ac),#6d28d9);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px}
-.ai-btn:hover{opacity:.9}.ai-btn:disabled{opacity:.5;cursor:not-allowed}
-.ai-result{margin-top:12px;padding:14px;background:var(--card);border:1px solid var(--bdr);border-radius:10px;font-size:13px;line-height:1.7;white-space:pre-wrap}
-.api-wrap{margin-bottom:14px}
-.api-input{width:100%;padding:10px 12px;background:var(--inp);border:1px solid var(--bdr);border-radius:8px;color:var(--txt);font-size:12px;outline:none;font-family:'SF Mono','Menlo',monospace}
-.api-st{font-size:10px;margin-top:4px}
-.copy-btn{margin-top:8px;padding:8px 14px;border:1px solid var(--bdr);border-radius:6px;background:transparent;color:var(--acl);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
-.export-btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,#0891b2,#06b6d4);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px}
-.export-btn:hover{opacity:.9}
+.ft{text-align:center;font-size:10px;color:var(--ghost);margin-top:16px}
+.export-btn{width:100%;padding:12px;border:none;border-radius:8px;background:var(--ac);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px}
+.export-btn:hover{background:var(--acs)}
 .achieve-track{height:14px;background:var(--inp);border-radius:7px;overflow:hidden;position:relative}
 .achieve-fill{height:100%;border-radius:7px;transition:width .4s}
 .achieve-label{position:absolute;right:6px;top:0;height:100%;display:flex;align-items:center;font-size:9px;font-weight:700;color:#fff}
 .textarea{width:100%;padding:10px 12px;background:var(--inp);border:1px solid var(--bdr);border-radius:8px;color:var(--txt);font-size:13px;outline:none;font-family:inherit;resize:vertical;min-height:50px}
+.textarea:focus{border-color:var(--ac)}
 .scenario-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 .scenario-tbl th{text-align:left;padding:7px 10px;background:var(--inp);color:var(--dim);font-weight:600;border-bottom:1px solid var(--bdr);font-size:11px}
 .scenario-tbl td{padding:7px 10px;border-bottom:1px solid var(--bdr);font-family:'SF Mono','Menlo',monospace;font-size:12px}
-.sel-row{background:#7c3aed22!important}
-.upload-zone{border:2px dashed var(--ac);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px}
-.upload-zone:hover{background:var(--acd);border-color:var(--acl)}
-.upload-zone.loaded{border-color:var(--grn);border-style:solid}
+.sel-row{background:var(--acd)!important}
+.upload-zone{border:2px dashed var(--ac);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.upload-zone:hover,.upload-zone.dragover{background:var(--acd);border-color:var(--acs)}
+.upload-zone.loaded{border-color:var(--grn);border-style:solid;background:#f0faf4}
 .upload-icon{font-size:28px;margin-bottom:6px}
 .upload-label{font-size:12px;color:var(--dim);font-weight:500}
 .upload-status{font-size:11px;margin-top:6px}
 .upload-input{display:none}
-.season-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.season-btn{padding:10px 6px;border:1px solid var(--bdr);border-radius:10px;background:var(--inp);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit}
-.season-btn:hover{border-color:var(--ac);color:var(--acl)}
-.season-btn.on{background:var(--acd);border-color:var(--ac);color:#fff}
-.rec-item{padding:12px;background:var(--inp);border:1px solid var(--bdr);border-radius:10px;margin-bottom:10px}
-.rec-name{font-weight:600;font-size:13px;margin-bottom:4px}
-.rec-detail{font-size:11px;color:var(--faint)}
-.onboard{text-align:center;padding:40px 20px}
+.onboard{text-align:center;padding:48px 20px}
 .onboard-icon{font-size:48px;margin-bottom:12px}
-.onboard-title{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--acl)}
+.onboard-title{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ac)}
 .onboard-desc{font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:16px}
 </style>
 </head>
 <body>
 <div class="hdr">
   <h1>🧮 톰토미 AMD 프로모션 도구</h1>
-  <p>마진 계산 · 기획전 플래너 · AI 문구 · 보고서</p>
+  <p>마진 계산 · 번들 구성 · 기획전 플래너 · 보고서</p>
 </div>
 
-<!-- 데이터 업로드 섹션 -->
+<!-- 데이터 업로드 -->
 <div class="cd" id="dataSection">
-  <div class="sl" style="color:var(--ylw)">📂 데이터 업로드</div>
-  <div class="upload-zone" id="costZone" onclick="document.getElementById('costFile').click()">
-    <div class="upload-icon">📊</div>
-    <div class="upload-label">원가 엑셀 업로드 (.xlsx)</div>
-    <div class="upload-status" id="costStatus" style="color:var(--faint)">원가_복사본.xlsx 파일을 올려주세요</div>
-    <input type="file" class="upload-input" id="costFile" accept=".xlsx,.xls" onchange="loadCostFile(this)">
-  </div>
-  <div class="upload-zone" id="storeZone" onclick="document.getElementById('storeFile').click()">
-    <div class="upload-icon">🛒</div>
-    <div class="upload-label">스마트스토어 CSV 업로드 (선택)</div>
-    <div class="upload-status" id="storeStatus" style="color:var(--faint)">판매가 자동 매칭용 · 없어도 사용 가능</div>
-    <input type="file" class="upload-input" id="storeFile" accept=".csv" onchange="loadStoreCSV(this)">
+  <div class="sl">📂 데이터 업로드</div>
+  <div class="row">
+    <div class="upload-zone" id="costZone" onclick="document.getElementById('costFile').click()">
+      <div class="upload-icon">📊</div>
+      <div class="upload-label">원가 엑셀 업로드 (.xlsx)</div>
+      <div class="upload-status" id="costStatus" style="color:var(--faint)">원가_복사본.xlsx 파일을 올려주세요</div>
+      <input type="file" class="upload-input" id="costFile" accept=".xlsx,.xls" onchange="loadCostFile(this)">
+    </div>
+    <div class="upload-zone" id="storeZone" onclick="document.getElementById('storeFile').click()">
+      <div class="upload-icon">🛒</div>
+      <div class="upload-label">스마트스토어 CSV 업로드 (선택)</div>
+      <div class="upload-status" id="storeStatus" style="color:var(--faint)">판매가 자동 매칭용 · 없어도 사용 가능</div>
+      <input type="file" class="upload-input" id="storeFile" accept=".csv" onchange="loadStoreCSV(this)">
+    </div>
   </div>
 </div>
 
-<!-- 온보딩 (데이터 없을 때) -->
+<!-- 온보딩 -->
 <div id="onboardMsg">
   <div class="onboard">
     <div class="onboard-icon">📂</div>
     <div class="onboard-title">원가 엑셀을 먼저 올려주세요!</div>
-    <div class="onboard-desc">원가 파일을 업로드하면<br>마진 계산기와 기획전 플래너가 활성화돼요.<br><br>스마트스토어 CSV는 선택사항이에요.<br>올리면 판매가가 자동으로 매칭됩니다.</div>
+    <div class="onboard-desc">원가 파일을 업로드하면 마진 계산기와 기획전 플래너가 활성화돼요.<br>스마트스토어 CSV는 선택사항이에요. 올리면 판매가가 자동으로 매칭됩니다.</div>
   </div>
 </div>
 
-<!-- 메인 콘텐츠 (데이터 로드 후 표시) -->
+<!-- 메인 콘텐츠 -->
 <div id="mainContent" style="display:none">
 <div class="tabs" id="mainTab">
   <button class="on" data-tab="single" onclick="switchTab('single')">🏷️ 단품</button>
   <button data-tab="bundle" onclick="switchTab('bundle')">📦 번들</button>
-  <button data-tab="planner" onclick="switchTab('planner')">🎪 기획전</button>
+  <button data-tab="promo" onclick="switchTab('promo')">🎪 기획전</button>
 </div>
 <div class="tabs" id="modeTab">
   <button class="on2" data-mode="discount" onclick="switchMode('discount')">할인율 → 마진</button>
   <button data-mode="target" onclick="switchMode('target')">목표마진 → 판매가</button>
 </div>
 
-<!-- SINGLE -->
+<!-- ===== SINGLE ===== -->
 <div id="sec-single">
-  <div class="cd"><div class="sl" style="color:var(--acl)">📋 제품 정보</div>
-    <div class="sw"><label class="fl">제품 선택</label><input class="fi fi-sm" id="sSearch" placeholder="제품명 또는 코드 검색..." oninput="filterSD()" onfocus="openSD()"><div id="sSel" class="ss"></div><div class="dd" id="sDD"></div></div>
-    <div class="dvr"><div class="dvl"></div><span class="dvt">또는 직접 입력</span><div class="dvl"></div></div>
-    <div class="fg"><label class="fl">원가 직접 입력</label><div class="fr"><input class="fi" id="sManual" inputmode="decimal" placeholder="직접 입력" oninput="onManual()"><span class="fs">원</span></div></div>
-    <div id="sDiscF">
-      <div class="fg"><label class="fl">정상 판매가</label><div class="fr"><input class="fi" id="sPrice" inputmode="decimal" placeholder="예: 15000" oninput="calc()"><span class="fs">원</span></div><div class="fh" id="sPriceHint"></div></div>
-      <div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="sDisc" inputmode="decimal" placeholder="0" oninput="calc()"><span class="fs">%</span></div><div class="fh">0이면 정상가 마진</div></div>
+  <div class="row">
+    <div class="cd"><div class="sl">📋 제품 정보</div>
+      <div class="sw"><label class="fl">제품 선택</label><input class="fi fi-sm" id="sSearch" placeholder="제품명 또는 코드 검색..." oninput="filterSD()" onfocus="openSD()"><div id="sSel" class="ss"></div><div class="dd" id="sDD"></div></div>
+      <div class="dvr"><div class="dvl"></div><span class="dvt">또는 직접 입력</span><div class="dvl"></div></div>
+      <div class="fg"><label class="fl">원가 직접 입력</label><div class="fr"><input class="fi" id="sManual" inputmode="decimal" placeholder="직접 입력" oninput="onManual()"><span class="fs">원</span></div></div>
+      <div id="sDiscF">
+        <div class="fg"><label class="fl">정상 판매가</label><div class="fr"><input class="fi" id="sPrice" inputmode="decimal" placeholder="예: 15000" oninput="calc()"><span class="fs">원</span></div><div class="fh" id="sPriceHint"></div></div>
+        <div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="sDisc" inputmode="decimal" placeholder="0" oninput="calc()"><span class="fs">%</span></div><div class="fh">0이면 정상가 마진</div></div>
+      </div>
+      <div id="sTargF" style="display:none">
+        <div class="fg"><label class="fl">목표 마진율</label><div class="fr"><input class="fi" id="sTarg" inputmode="decimal" placeholder="예: 20" oninput="calc()"><span class="fs">%</span></div></div>
+      </div>
     </div>
-    <div id="sTargF" style="display:none">
-      <div class="fg"><label class="fl">목표 마진율</label><div class="fr"><input class="fi" id="sTarg" inputmode="decimal" placeholder="예: 20" oninput="calc()"><span class="fs">%</span></div></div>
-    </div>
+    <div id="sRes"></div>
   </div>
-  <div id="sRes"></div>
 </div>
 
-<!-- BUNDLE -->
+<!-- ===== BUNDLE (순수 계산) ===== -->
 <div id="sec-bundle" style="display:none">
-  <div class="cd"><div class="sl" style="color:var(--ylw)">📋 기획전 정보</div>
-    <div class="fg"><label class="fl">기획전명</label><input class="fi fi-txt" id="bEventName" placeholder="예: 어린이날 톰토미 특별전"></div>
-    <div class="fg"><label class="fl">행사 기간</label><div class="fr"><input class="fi fi-sm" id="bStart" type="date" style="font-size:13px"><span class="dvt">~</span><input class="fi fi-sm" id="bEnd" type="date" style="font-size:13px"></div></div>
-    <div class="fg"><label class="fl">판매 채널</label><input class="fi fi-txt" id="bStore" value="네이버 스마트스토어"></div>
+  <div class="row">
+    <div>
+      <div class="cd"><div class="sl" style="color:var(--org)">📦 번들 구성</div><div id="bItems"></div><button class="bab" onclick="addBI()">+ 상품 추가</button><div id="bSum"></div></div>
+      <div class="cd"><div class="sl">💲 가격 설정</div>
+        <div id="bDiscF"><div class="fg"><label class="fl">번들 판매가</label><div class="fr"><input class="fi" id="bPrice" inputmode="decimal" placeholder="번들 가격" oninput="calcBundle()"><span class="fs">원</span></div></div>
+          <div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="bDisc" inputmode="decimal" placeholder="0" oninput="calcBundle()"><span class="fs">%</span></div></div></div>
+        <div id="bTargF" style="display:none"><div class="fg"><label class="fl">목표 마진율</label><div class="fr"><input class="fi" id="bTarg" inputmode="decimal" placeholder="예: 20" oninput="calcBundle()"><span class="fs">%</span></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div id="bRes"></div>
+      <div id="bScenario"></div>
+    </div>
   </div>
-  <div class="cd"><div class="sl" style="color:var(--org)">📦 번들 구성</div><div id="bItems"></div><button class="bab" onclick="addBI()">+ 상품 추가</button><div id="bSum"></div></div>
-  <div class="cd"><div class="sl" style="color:var(--acl)">💲 가격 & 목표</div>
-    <div id="bDiscF"><div class="fg"><label class="fl">번들 판매가</label><div class="fr"><input class="fi" id="bPrice" inputmode="decimal" placeholder="번들 가격" oninput="calcBundle()"><span class="fs">원</span></div></div>
-      <div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="bDisc" inputmode="decimal" placeholder="0" oninput="calcBundle()"><span class="fs">%</span></div></div></div>
-    <div id="bTargF" style="display:none"><div class="fg"><label class="fl">목표 마진율</label><div class="fr"><input class="fi" id="bTarg" inputmode="decimal" placeholder="예: 20" oninput="calcBundle()"><span class="fs">%</span></div></div></div>
-    <div class="fg"><label class="fl">목표 판매수량</label><div class="fr"><input class="fi" id="bGoalQty" inputmode="numeric" placeholder="예: 100" oninput="calcBundle()"><span class="fs">개</span></div></div>
-  </div>
-  <div id="bRes"></div><div id="bGoalSummary"></div><div id="bScenario"></div>
-  <div class="cd" id="bContentSection" style="display:none">
-    <div class="sl" style="color:var(--acs)">✍️ 기획 컨텐츠</div>
-    <div class="fg"><label class="fl">기획 의도 / 배경</label><textarea class="textarea" id="bBgText" placeholder="예: 어린이날 시즌을 맞아 톰토미 캐릭터 인지도 확대 및 신규 고객 유입을 위한 할인 기획전..." style="min-height:80px" oninput="updateContentState()"></textarea><div class="fh">보고서에 포함됩니다</div></div>
-    <div class="fg"><label class="fl">기획전 문구</label><textarea class="textarea" id="bCpText" placeholder="예: 🎉 톰토미와 함께하는 어린이날! 지금 만나면 최대 20% 할인!" style="min-height:80px" oninput="updateContentState()"></textarea><div class="fh">제목·부제목·설명 등 자유 형식</div></div>
-  </div>
-  <div class="cd" id="bResultSection" style="display:none">
-    <div class="sl" style="color:var(--ylw)">📈 실적 기록</div>
-    <div class="fg"><label class="fl">실제 판매수량</label><div class="fr"><input class="fi" id="bActQty" inputmode="numeric" placeholder="0" oninput="calcActual()"><span class="fs">개</span></div></div>
-    <div class="fg"><label class="fl">비고</label><textarea class="textarea" id="bMemo" placeholder="특이사항"></textarea></div>
-    <div id="bActResult"></div>
-  </div>
-  <div id="bExportSection" style="display:none"><button class="export-btn" onclick="exportBundle()">📄 보고서 내보내기</button></div>
 </div>
 
-<!-- PLANNER -->
-<div id="sec-planner" style="display:none">
-  <div class="cd"><div class="sl" style="color:var(--org)">📅 시즌별 번들 추천</div>
-    <div class="fh" style="margin-bottom:10px">시즌 선택 → 추천 번들 참고</div>
-    <div class="season-grid" id="seasonGrid"></div></div>
-  <div id="pRecSection" style="display:none"><div class="cd"><div class="sl" style="color:var(--acl)">🎁 추천 번들</div><div id="pRecList"></div></div></div>
+<!-- ===== PROMO (기획전 = 번들 + 기획정보 + 보고서) ===== -->
+<div id="sec-promo" style="display:none">
+  <div class="row">
+    <div>
+      <div class="cd"><div class="sl">📋 기획전 정보</div>
+        <div class="fg"><label class="fl">기획전명</label><input class="fi fi-txt" id="pEventName" placeholder="예: 어린이날 톰토미 특별전"></div>
+        <div class="fg"><label class="fl">행사 기간</label><div class="fr"><input class="fi fi-sm" id="pStart" type="date" style="font-size:13px"><span class="dvt">~</span><input class="fi fi-sm" id="pEnd" type="date" style="font-size:13px"></div></div>
+        <div class="fg"><label class="fl">판매 채널</label><input class="fi fi-txt" id="pStore" value="네이버 스마트스토어"></div>
+      </div>
+      <div class="cd"><div class="sl" style="color:var(--org)">📦 번들 구성</div><div id="pItems"></div><button class="bab" onclick="addPI()">+ 상품 추가</button><div id="pSum"></div></div>
+      <div class="cd"><div class="sl">💲 가격 & 목표</div>
+        <div id="pDiscF"><div class="fg"><label class="fl">번들 판매가</label><div class="fr"><input class="fi" id="pPrice" inputmode="decimal" placeholder="번들 가격" oninput="calcPromo()"><span class="fs">원</span></div></div>
+          <div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="pDisc" inputmode="decimal" placeholder="0" oninput="calcPromo()"><span class="fs">%</span></div></div></div>
+        <div id="pTargF" style="display:none"><div class="fg"><label class="fl">목표 마진율</label><div class="fr"><input class="fi" id="pTarg" inputmode="decimal" placeholder="예: 20" oninput="calcPromo()"><span class="fs">%</span></div></div></div>
+        <div class="fg"><label class="fl">목표 판매수량</label><div class="fr"><input class="fi" id="pGoalQty" inputmode="numeric" placeholder="예: 100" oninput="calcPromo()"><span class="fs">개</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div id="pRes"></div>
+      <div id="pGoalSummary"></div>
+      <div id="pScenario"></div>
+      <div class="cd" id="pContentSection" style="display:none">
+        <div class="sl">✍️ 기획 컨텐츠</div>
+        <div class="fg"><label class="fl">기획 의도 / 배경</label><textarea class="textarea" id="pBgText" placeholder="예: 어린이날 시즌을 맞아 톰토미 캐릭터 인지도 확대 및 신규 고객 유입을 위한 할인 기획전..." style="min-height:80px"></textarea><div class="fh">보고서에 포함됩니다</div></div>
+        <div class="fg"><label class="fl">기획전 문구</label><textarea class="textarea" id="pCpText" placeholder="예: 🎉 톰토미와 함께하는 어린이날! 지금 만나면 최대 20% 할인!" style="min-height:80px"></textarea><div class="fh">제목·부제목·설명 등 자유 형식</div></div>
+      </div>
+      <div class="cd" id="pResultSection" style="display:none">
+        <div class="sl" style="color:var(--ylw)">📈 실적 기록</div>
+        <div class="fg"><label class="fl">실제 판매수량</label><div class="fr"><input class="fi" id="pActQty" inputmode="numeric" placeholder="0" oninput="calcPromoActual()"><span class="fs">개</span></div></div>
+        <div class="fg"><label class="fl">비고</label><textarea class="textarea" id="pMemo" placeholder="특이사항"></textarea></div>
+        <div id="pActResult"></div>
+      </div>
+      <div id="pExportSection" style="display:none"><button class="export-btn" onclick="exportPromo()">📄 보고서 내보내기</button></div>
+    </div>
+  </div>
 </div>
 </div><!-- /mainContent -->
 
@@ -214,43 +232,44 @@ body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Go
   <div id="stBody" style="display:none">
     <div class="tw"><div class="tr" onclick="togVat()"><div class="tt" id="vatT" style="background:var(--ac)"><div class="tm" id="vatM" style="left:21px"></div></div><span class="tl">VAT 포함 기준</span></div><div class="th" id="vatH">✅ VAT+</div></div>
     <div class="tw"><div class="tr" onclick="togShip()"><div class="tt" id="shipT" style="background:var(--ac)"><div class="tm" id="shipM" style="left:21px"></div></div><span class="tl">배송비 원가 포함</span></div><div class="th" id="shipH">✅ 조건부 무배</div></div>
-    <div class="fg"><label class="fl">배송비</label><div class="fr"><input class="fi" id="xShip" inputmode="decimal" value="3000" oninput="calc();calcBundle()"><span class="fs">원</span></div></div>
-    <div class="fg"><label class="fl">무료배송 기준</label><div class="fr"><input class="fi" id="xFree" inputmode="decimal" value="30000" oninput="calc();calcBundle()"><span class="fs">원</span></div></div>
-    <div class="fg"><label class="fl">채널 수수료율</label><div class="fr"><input class="fi" id="xComm" inputmode="decimal" value="7" oninput="calc();calcBundle()"><span class="fs">%</span></div></div>
+    <div class="fg"><label class="fl">배송비</label><div class="fr"><input class="fi" id="xShip" inputmode="decimal" value="3000" oninput="calc();calcBundle();calcPromo()"><span class="fs">원</span></div></div>
+    <div class="fg"><label class="fl">무료배송 기준</label><div class="fr"><input class="fi" id="xFree" inputmode="decimal" value="30000" oninput="calc();calcBundle();calcPromo()"><span class="fs">원</span></div></div>
+    <div class="fg"><label class="fl">채널 수수료율</label><div class="fr"><input class="fi" id="xComm" inputmode="decimal" value="7" oninput="calc();calcBundle();calcPromo()"><span class="fs">%</span></div></div>
   </div>
 </div>
 <div class="ft" id="footerTxt"></div>
 
 <script>
-/* ═══ DATA (동적 로드) ═══ */
-let P=[];  // {c,n,vp,vm,sp,hp}
-const SEASONS=[{id:'children',label:'🧒 어린이날'},{id:'christmas',label:'🎄 크리스마스'},{id:'backtoschool',label:'🎒 입학/개학'},{id:'summer',label:'🌊 여름방학'},{id:'winter',label:'❄️ 겨울방학'},{id:'gift',label:'🎁 선물세트'},{id:'newYear',label:'🎍 새해/설날'},{id:'parents',label:'👨‍👩‍👧 가정의달'},{id:'sale',label:'🔥 할인행사'}];
-const RECIPES=[
-{name:'봉제+키링',match:['봉제인형','미니키링'],s:['children','christmas','gift','parents']},
-{name:'공룡 세트',match:['공룡 마이크','스티커북','빅롤'],s:['children','summer','gift']},
-{name:'학습 세트',match:['한글','숫자','IQ'],s:['backtoschool','gift','parents']},
-{name:'위인 학습',match:['위인','사운드북'],s:['backtoschool','parents','gift']},
-{name:'피규어 세트',match:['피규어'],s:['children','christmas','gift']},
-{name:'크리스마스',match:['크리스마스','캐롤','봉제'],s:['christmas']},
-{name:'도미노 세트',match:['도미노'],s:['children','christmas','gift','winter']},
-{name:'색칠 놀이',match:['색칠','두들','빅롤'],s:['summer','winter','sale']},
-{name:'스티커 세트',match:['스티커북','미니 스티커','데코'],s:['children','summer','winter','sale']},
-];
-
+/* ═══ DATA ═══ */
+let P=[];
 let tab='single',mode='discount',vat=true,incShip=true,selCode='';
 let bItems=[{pc:'',q:1}];
+let pItems=[{pc:'',q:1}];
 let costLoaded=false;
 
 const nv=id=>{const e=document.getElementById(id);return e?parseFloat(e.value)||0:0};
 const sv=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
 const fmt=n=>(n==null||isNaN(n)||!isFinite(n))?'—':Math.round(n).toLocaleString('ko-KR');
 const pct=n=>(n==null||isNaN(n)||!isFinite(n))?'—':n.toFixed(1)+'%';
-const mc=v=>v>=30?'var(--grn)':v>=15?'#a3e635':v>=5?'var(--ylw)':v>=0?'var(--org)':'var(--red)';
+const mc=v=>v>=30?'var(--grn)':v>=15?'#6aaa3d':v>=5?'var(--ylw)':v>=0?'var(--org)':'var(--red)';
 const gc=c=>{const p=P.find(x=>x.c===c);return p?(vat?p.vp:p.vm):0};
 const gn=c=>(P.find(x=>x.c===c)||{}).n||'';
 const gsp=c=>(P.find(x=>x.c===c)||{}).sp||0;
 const ghp=c=>(P.find(x=>x.c===c)||{}).hp||0;
 const shl=(inc,s)=>!inc?'(제외)':s?'(판매자부담)':'(구매자부담)';
+
+/* ═══ DRAG & DROP ═══ */
+function setupDragDrop(zoneId,fileInputId){
+  const zone=document.getElementById(zoneId);
+  ['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();zone.classList.add('dragover')}));
+  ['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();zone.classList.remove('dragover')}));
+  zone.addEventListener('drop',e=>{
+    const file=e.dataTransfer.files[0];if(!file)return;
+    const input=document.getElementById(fileInputId);
+    const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;
+    input.dispatchEvent(new Event('change'));
+  });
+}
 
 /* ═══ FILE LOADERS ═══ */
 function loadCostFile(input){
@@ -261,7 +280,6 @@ function loadCostFile(input){
       const wb=XLSX.read(e.target.result,{type:'array'});
       const ws=wb.Sheets[wb.SheetNames[0]];
       const data=XLSX.utils.sheet_to_json(ws,{header:1});
-      // Find header row (품목코드, 품목명, 입고단가)
       let headerRow=-1;
       for(let i=0;i<Math.min(data.length,10);i++){
         const row=data[i];
@@ -289,7 +307,7 @@ function loadCostFile(input){
       document.getElementById('costStatus').innerHTML=`<span style="color:var(--grn)">✅ ${P.length}개 제품 로드됨</span>`;
       document.getElementById('onboardMsg').style.display='none';
       document.getElementById('mainContent').style.display='';
-      initSeasons();renderBI();calc();
+      renderBI();renderPI();calc();
       document.getElementById('footerTxt').textContent='제품 '+P.length+'개 로드됨';
     }catch(err){document.getElementById('costStatus').innerHTML=`<span style="color:var(--red)">❌ 파일 오류: ${err.message}</span>`}
   };
@@ -311,7 +329,6 @@ function loadStoreCSV(input){
       if(codeIdx<0||priceIdx<0){document.getElementById('storeStatus').innerHTML='<span style="color:var(--red)">❌ 필수 열 없음</span>';return}
       let matched=0;
       for(let i=1;i<lines.length;i++){
-        // Handle CSV with possible commas in quoted fields
         const cols=[];let cur='',inQ=false;
         for(const ch of lines[i]){if(ch==='"'){inQ=!inQ}else if(ch===','&&!inQ){cols.push(cur.trim());cur=''}else{cur+=ch}}
         cols.push(cur.trim());
@@ -327,26 +344,32 @@ function loadStoreCSV(input){
       }
       document.getElementById('storeZone').classList.add('loaded');
       document.getElementById('storeStatus').innerHTML=`<span style="color:var(--grn)">✅ ${matched}개 제품 판매가 매칭됨</span>`;
-      renderBI();
+      renderBI();renderPI();
     }catch(err){document.getElementById('storeStatus').innerHTML=`<span style="color:var(--red)">❌ ${err.message}</span>`}
   };
   reader.readAsText(file,'utf-8');
 }
 
 /* ═══ UI ═══ */
-function switchTab(t){tab=t;document.querySelectorAll('#mainTab button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));['single','bundle','planner'].forEach(s=>document.getElementById('sec-'+s).style.display=s===t?'':'none');document.getElementById('modeTab').style.display=t==='planner'?'none':'flex';calc()}
-function switchMode(m){mode=m;document.querySelectorAll('#modeTab button').forEach(b=>b.classList.toggle('on2',b.dataset.mode===m));document.getElementById('sDiscF').style.display=m==='discount'?'':'none';document.getElementById('sTargF').style.display=m==='target'?'':'none';document.getElementById('bDiscF').style.display=m==='discount'?'':'none';document.getElementById('bTargF').style.display=m==='target'?'':'none';calc();calcBundle()}
-function togVat(){vat=!vat;document.getElementById('vatT').style.background=vat?'var(--ac)':'var(--bdr)';document.getElementById('vatM').style.left=vat?'21px':'3px';document.getElementById('vatH').textContent=vat?'✅ VAT+':'❌ VAT−';if(selCode){document.getElementById('sManual').value=Math.round(gc(selCode));updateSelInfo()}renderBI();calc();calcBundle()}
-function togShip(){incShip=!incShip;document.getElementById('shipT').style.background=incShip?'var(--ac)':'var(--bdr)';document.getElementById('shipM').style.left=incShip?'21px':'3px';document.getElementById('shipH').textContent=incShip?'✅ 조건부 무배':'❌ 배송비 제외';calc();calcBundle()}
+function switchTab(t){tab=t;document.querySelectorAll('#mainTab button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));['single','bundle','promo'].forEach(s=>document.getElementById('sec-'+s).style.display=s===t?'':'none');document.getElementById('modeTab').style.display='flex';calc();calcBundle();calcPromo()}
+function switchMode(m){mode=m;document.querySelectorAll('#modeTab button').forEach(b=>b.classList.toggle('on2',b.dataset.mode===m));
+  document.getElementById('sDiscF').style.display=m==='discount'?'':'none';document.getElementById('sTargF').style.display=m==='target'?'':'none';
+  document.getElementById('bDiscF').style.display=m==='discount'?'':'none';document.getElementById('bTargF').style.display=m==='target'?'':'none';
+  document.getElementById('pDiscF').style.display=m==='discount'?'':'none';document.getElementById('pTargF').style.display=m==='target'?'':'none';
+  calc();calcBundle();calcPromo()}
+function togVat(){vat=!vat;document.getElementById('vatT').style.background=vat?'var(--ac)':'var(--bdr)';document.getElementById('vatM').style.left=vat?'21px':'3px';document.getElementById('vatH').textContent=vat?'✅ VAT+':'❌ VAT−';if(selCode){document.getElementById('sManual').value=Math.round(gc(selCode));updateSelInfo()}renderBI();renderPI();calc();calcBundle();calcPromo()}
+function togShip(){incShip=!incShip;document.getElementById('shipT').style.background=incShip?'var(--ac)':'var(--bdr)';document.getElementById('shipM').style.left=incShip?'21px':'3px';document.getElementById('shipH').textContent=incShip?'✅ 조건부 무배':'❌ 배송비 제외';calc();calcBundle();calcPromo()}
 function toggleSettings(){const b=document.getElementById('stBody'),a=document.getElementById('stArrow'),o=b.style.display!=='none';b.style.display=o?'none':'';a.style.transform=o?'none':'rotate(180deg)'}
 function updateSelInfo(){if(!selCode)return;const sp=gsp(selCode),hp=ghp(selCode);document.getElementById('sSel').innerHTML='✓ '+gn(selCode)+' — 원가 '+fmt(gc(selCode))+'원'+(sp?'<br>📌 스토어 판매가 '+fmt(sp)+'원 / 할인가 '+fmt(hp)+'원':'');document.getElementById('sPriceHint').textContent=sp?'💡 스토어: '+fmt(sp)+'원 / 할인가 '+fmt(hp)+'원':''}
 
+/* Single search */
 function filterSD(){const dd=document.getElementById('sDD'),t=document.getElementById('sSearch').value.toLowerCase(),f=t?P.filter(p=>p.n.toLowerCase().includes(t)||p.c.toLowerCase().includes(t)):P;
   dd.innerHTML=f.length?f.slice(0,30).map(p=>`<div class="di" data-c="${p.c}"><div class="dn">${p.n}</div><div class="ds">${p.c} · 원가 ${fmt(vat?p.vp:p.vm)}원</div>${p.sp?`<div class="dp">판매가 ${fmt(p.sp)}원 → ${fmt(p.hp)}원</div>`:''}</div>`).join(''):'<div class="de">검색 결과 없음</div>';
   dd.querySelectorAll('.di').forEach(el=>el.addEventListener('click',()=>{selCode=el.dataset.c;document.getElementById('sSearch').value=gn(selCode);document.getElementById('sManual').value=Math.round(gc(selCode));const sp=gsp(selCode);if(sp&&!nv('sPrice'))document.getElementById('sPrice').value=sp;updateSelInfo();dd.classList.remove('open');calc()}));dd.classList.add('open')}
 function openSD(){filterSD();document.getElementById('sDD').classList.add('open')}
 function onManual(){document.getElementById('sManual').value=document.getElementById('sManual').value.replace(/[^0-9.]/g,'');selCode='';document.getElementById('sSearch').value='';document.getElementById('sSel').textContent='';document.getElementById('sPriceHint').textContent='';calc()}
 
+/* Bundle items */
 function renderBI(){document.getElementById('bItems').innerHTML=bItems.map((it,i)=>{const sp=it.pc?gsp(it.pc):0;return `<div class="bi"><div class="bih"><span class="bin">상품 ${i+1}</span>${bItems.length>1?`<button class="brm" onclick="rmBI(${i})">×</button>`:''}</div><div class="sw"><input class="fi fi-sm" id="bS${i}" placeholder="제품 검색..." value="${it.pc?gn(it.pc):''}" oninput="filterBD(${i})" onfocus="openBD(${i})">${it.pc?`<div class="ss">✓ ${gn(it.pc)} — 원가 ${fmt(gc(it.pc))}원${sp?' · 판매가 '+fmt(sp)+'원':''}</div>`:''}<div class="dd" id="bD${i}"></div></div><div><label class="fl" style="font-size:11px">수량</label><input class="fi qi" id="bQ${i}" inputmode="numeric" value="${it.q}" oninput="upBQ(${i})" style="font-size:13px"></div></div>`}).join('');updBSum()}
 function addBI(){bItems.push({pc:'',q:1});renderBI()}
 function rmBI(i){if(bItems.length<=1)return;bItems.splice(i,1);renderBI();calcBundle()}
@@ -358,84 +381,106 @@ function upBQ(i){bItems[i].q=parseInt(document.getElementById('bQ'+i).value.repl
 function updBSum(){const tot=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),cnt=bItems.reduce((s,i)=>s+(i.q||0),0),spTot=bItems.reduce((s,i)=>s+gsp(i.pc)*(i.q||0),0);
   document.getElementById('bSum').innerHTML=tot>0?`<div class="bsm"><div class="bsr"><span>원가 합계 (${cnt}개)</span><span style="font-weight:700;font-family:monospace">${fmt(tot)}원</span></div>${spTot?`<div class="bsr" style="margin-top:4px;font-size:11px"><span>개별 판매가 합계</span><span>${fmt(spTot)}원</span></div>`:''}</div>`:'';}
 
+/* Promo items */
+function renderPI(){document.getElementById('pItems').innerHTML=pItems.map((it,i)=>{const sp=it.pc?gsp(it.pc):0;return `<div class="bi"><div class="bih"><span class="bin">상품 ${i+1}</span>${pItems.length>1?`<button class="brm" onclick="rmPI(${i})">×</button>`:''}</div><div class="sw"><input class="fi fi-sm" id="pS${i}" placeholder="제품 검색..." value="${it.pc?gn(it.pc):''}" oninput="filterPD(${i})" onfocus="openPD(${i})">${it.pc?`<div class="ss">✓ ${gn(it.pc)} — 원가 ${fmt(gc(it.pc))}원${sp?' · 판매가 '+fmt(sp)+'원':''}</div>`:''}<div class="dd" id="pD${i}"></div></div><div><label class="fl" style="font-size:11px">수량</label><input class="fi qi" id="pQ${i}" inputmode="numeric" value="${it.q}" oninput="upPQ(${i})" style="font-size:13px"></div></div>`}).join('');updPSum()}
+function addPI(){pItems.push({pc:'',q:1});renderPI()}
+function rmPI(i){if(pItems.length<=1)return;pItems.splice(i,1);renderPI();calcPromo()}
+function filterPD(i){const dd=document.getElementById('pD'+i),t=document.getElementById('pS'+i).value.toLowerCase(),f=t?P.filter(p=>p.n.toLowerCase().includes(t)||p.c.toLowerCase().includes(t)):P;
+  dd.innerHTML=f.length?f.slice(0,30).map(p=>`<div class="di" data-c="${p.c}"><div class="dn">${p.n}</div><div class="ds">${p.c} · ${fmt(vat?p.vp:p.vm)}원${p.sp?' · 판매가 '+fmt(p.sp)+'원':''}</div></div>`).join(''):'<div class="de">없음</div>';
+  dd.querySelectorAll('.di').forEach(el=>el.addEventListener('click',()=>{pItems[i].pc=el.dataset.c;document.getElementById('pS'+i).value=gn(el.dataset.c);dd.classList.remove('open');renderPI();calcPromo()}));dd.classList.add('open')}
+function openPD(i){filterPD(i)}
+function upPQ(i){pItems[i].q=parseInt(document.getElementById('pQ'+i).value.replace(/[^0-9]/g,''))||0;updPSum();calcPromo()}
+function updPSum(){const tot=pItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),cnt=pItems.reduce((s,i)=>s+(i.q||0),0),spTot=pItems.reduce((s,i)=>s+gsp(i.pc)*(i.q||0),0);
+  document.getElementById('pSum').innerHTML=tot>0?`<div class="bsm"><div class="bsr"><span>원가 합계 (${cnt}개)</span><span style="font-weight:700;font-family:monospace">${fmt(tot)}원</span></div>${spTot?`<div class="bsr" style="margin-top:4px;font-size:11px"><span>개별 판매가 합계</span><span>${fmt(spTot)}원</span></div>`:''}</div>`:'';}
+
 /* ═══ CALC ═══ */
+function emH(){return '<div class="es"><div class="ic">☝️</div><div class="mg">정보를 입력하면<br>결과가 나와요!</div></div>'}
+function crH(rows){return rows.map(r=>`<div class="cr${r.b?' tot':''}"><span class="cl">${r.l}</span><span class="cv" style="color:${r.b?'var(--acs)':'var(--txt)'}">${r.v}</span></div>`).join('')}
+function resH(dp,pf,mg,loss,rows,origP,discR){const c=mc(isNaN(mg)?0:mg),w=Math.min(Math.max(isNaN(mg)?0:mg,0),100);const hasDisc=origP&&discR&&discR>0;const priceHtml=hasDisc?`<div class="rbl">판매가</div><div style="font-size:11px;color:var(--faint);text-decoration:line-through;margin-bottom:2px">${fmt(origP)}원</div><div class="rbv" style="color:var(--ac)">${fmt(dp)}원</div><div style="font-size:10px;color:var(--org);margin-top:1px">−${discR}%</div>`:`<div class="rbl">판매가</div><div class="rbv" style="color:var(--ac)">${fmt(dp)}원</div>`;return `<div class="cd-r"><div class="sl" style="color:var(--grn)">📊 결과</div><div class="rg"><div class="rb">${priceHtml}</div><div class="rb"><div class="rbl">순이익</div><div class="rbv" style="color:${pf>=0?'var(--grn)':'var(--red)'}">${fmt(pf)}원</div>${loss?'<div style="font-size:10px;color:var(--red)">⚠️ 적자!</div>':''}</div></div><div class="mb"><div class="mbh"><span>마진율</span><span style="color:${c};font-weight:700">${pct(mg)}</span></div><div class="mbt"><div class="mbf" style="width:${w}%;background:${c}"></div></div></div><div class="cb"><div class="ct">💰 원가 상세</div>${crH(rows)}</div>${loss?'<div class="wb">⚠️ 적자!</div>':''}</div>`}
+function trgH(mp,pf,imp,rows){if(imp)return `<div class="cd-r"><div class="wb">⚠️ 수수료+목표마진 &lt; 100% 필요</div></div>`;return `<div class="cd-r"><div class="sl" style="color:var(--grn)">📊 결과</div><div class="rg"><div class="rb"><div class="rbl">최소 판매가</div><div class="rbv" style="color:var(--ac)">${fmt(mp)}원</div></div><div class="rb"><div class="rbl">순이익</div><div class="rbv" style="color:var(--grn)">${fmt(pf)}원</div></div></div><div class="cb"><div class="ct">💰 원가 상세</div>${crH(rows)}</div></div>`}
+
+/* Single calc */
 function calc(){
   if(tab!=='single'||!costLoaded)return;
   const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),cost=selCode?gc(selCode):nv('sManual');
   if(mode==='discount'){const pr=nv('sPrice'),d=nv('sDisc');if(cost<=0||pr<=0){document.getElementById('sRes').innerHTML=emH();return}const dp=pr*(1-d/100),iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100),tot=cost+sh+cm,pf=dp-tot,mg=dp>0?(pf/dp)*100:0;document.getElementById('sRes').innerHTML=resH(dp,pf,mg,pf<0,[{l:`원가 (${vat?'VAT+':'VAT−'})`,v:fmt(cost)+'원'},{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}],pr,d)}
   else{const tM=nv('sTarg');if(cost<=0||tM<=0){document.getElementById('sRes').innerHTML=emH();return}const d=1-comm/100-tM/100;if(d<=0){document.getElementById('sRes').innerHTML=trgH(null,0,1,[]);return}let mp,iS=false;const pw=(cost+(incShip?ship:0))/d,pwo=cost/d;if(incShip){if(pw>=freeT){mp=pw;iS=true}else if(pwo<freeT){mp=pwo}else{mp=pw;iS=true}}else{mp=pwo}const sh=incShip&&iS?ship:0,cm=mp*(comm/100),tot=cost+sh+cm,pf=mp-tot;document.getElementById('sRes').innerHTML=trgH(mp,pf,0,[{l:`원가 (${vat?'VAT+':'VAT−'})`,v:fmt(cost)+'원'},{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}])}}
 
+/* Bundle calc (no goal qty) */
 function calcBundle(){
   if(!costLoaded)return;
-  const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),bCost=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),qty=nv('bGoalQty'),hasItems=bCost>0;
-  document.getElementById('bContentSection').style.display=hasItems?'':'none';
-  document.getElementById('bResultSection').style.display=hasItems?'':'none';
-  document.getElementById('bExportSection').style.display=hasItems?'':'none';
+  const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),bCost=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);
   if(mode==='discount'){
-    const bp=nv('bPrice'),bd=nv('bDisc');if(bCost<=0||bp<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bGoalSummary').innerHTML='';document.getElementById('bScenario').innerHTML='';return}
+    const bp=nv('bPrice'),bd=nv('bDisc');if(bCost<=0||bp<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bScenario').innerHTML='';return}
     const dp=bp*(1-bd/100),iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100),tot=bCost+sh+cm,pf=dp-tot,mg=dp>0?(pf/dp)*100:0;
     const ir=bItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));
     document.getElementById('bRes').innerHTML=resH(dp,pf,mg,pf<0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}],bp,bd);
-    if(qty>0){const tR=dp*qty,tP=pf*qty;const gpHtml=bd>0?`<div class="rbl">정상가</div><div style="font-size:11px;color:var(--faint);text-decoration:line-through">${fmt(bp)}원</div><div class="rbv rbv-sm" style="color:var(--acl)">${fmt(dp)}원</div><div style="font-size:9px;color:var(--org)">−${bd}%</div>`:`<div class="rbl">판매가</div><div class="rbv rbv-sm" style="color:var(--acl)">${fmt(dp)}원</div>`;document.getElementById('bGoalSummary').innerHTML=`<div class="cd-r"><div class="sl" style="color:var(--ylw)">🎯 목표 매출</div><div class="rg3"><div class="rb">${gpHtml}</div><div class="rb"><div class="rbl">예상 매출</div><div class="rbv rbv-sm" style="color:var(--acs)">${fmt(tR)}원</div></div><div class="rb"><div class="rbl">예상 이익</div><div class="rbv rbv-sm" style="color:${tP>=0?'var(--grn)':'var(--red)'}">${fmt(tP)}원</div></div></div></div>`}else{document.getElementById('bGoalSummary').innerHTML=''}
     const rates=[0,5,10,15,20,25,30,35,40,45,50];let st='<div class="cd"><div class="sl" style="color:var(--dim)">📊 시나리오</div><table class="scenario-tbl"><thead><tr><th>할인</th><th>정상가</th><th>할인가</th><th>이익</th><th>마진</th></tr></thead><tbody>';
     rates.forEach(d=>{const ddp=bp*(1-d/100),diS=ddp>=freeT,dsh=incShip?(diS?ship:0):0,dcm=ddp*(comm/100),dtot=bCost+dsh+dcm,dpf=ddp-dtot,dmg=ddp>0?(dpf/ddp)*100:0,c=dpf<0?'var(--red)':mc(dmg),sel=d===bd;st+=`<tr class="${sel?'sel-row':''}"><td>${d}%${sel?' ✓':''}</td><td style="color:var(--faint)">${fmt(bp)}원</td><td>${fmt(ddp)}원</td><td style="color:${c}">${fmt(dpf)}원</td><td style="color:${c};font-weight:700">${pct(dmg)}</td></tr>`});
     st+='</tbody></table></div>';document.getElementById('bScenario').innerHTML=st;
   }else{
-    const bt=nv('bTarg');if(bCost<=0||bt<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bGoalSummary').innerHTML='';document.getElementById('bScenario').innerHTML='';return}
+    const bt=nv('bTarg');if(bCost<=0||bt<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bScenario').innerHTML='';return}
     const d=1-comm/100-bt/100;if(d<=0){document.getElementById('bRes').innerHTML=trgH(null,0,1,[]);return}
     let mp,iS=false;const pw=(bCost+(incShip?ship:0))/d,pwo=bCost/d;if(incShip){if(pw>=freeT){mp=pw;iS=true}else if(pwo<freeT){mp=pwo}else{mp=pw;iS=true}}else{mp=pwo}
     const sh=incShip&&iS?ship:0,cm=mp*(comm/100),tot=bCost+sh+cm,pf=mp-tot;
     const ir=bItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));
     document.getElementById('bRes').innerHTML=trgH(mp,pf,0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}]);
-    if(qty>0){const tR=mp*qty,tP=pf*qty;document.getElementById('bGoalSummary').innerHTML=`<div class="cd-r"><div class="sl" style="color:var(--ylw)">🎯 목표</div><div class="rg3"><div class="rb"><div class="rbl">최소판매가</div><div class="rbv rbv-sm" style="color:var(--acl)">${fmt(mp)}원</div></div><div class="rb"><div class="rbl">예상 매출</div><div class="rbv rbv-sm" style="color:var(--acs)">${fmt(tR)}원</div></div><div class="rb"><div class="rbl">예상 이익</div><div class="rbv rbv-sm" style="color:var(--grn)">${fmt(tP)}원</div></div></div></div>`}else{document.getElementById('bGoalSummary').innerHTML=''}
     document.getElementById('bScenario').innerHTML='';
   }}
 
-function calcActual(){const rq=nv('bActQty'),tq=nv('bGoalQty');if(rq<=0||tq<=0){document.getElementById('bActResult').innerHTML='';return}const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),bCost=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);let dp=0,pf=0;if(mode==='discount'){const pr=nv('bPrice'),d=nv('bDisc');dp=pr*(1-d/100);const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(bCost+sh+cm)}else{const bt=nv('bTarg'),dd=1-comm/100-bt/100;if(dd<=0)return;const pw=(bCost+(incShip?ship:0))/dd,pwo=bCost/dd;let iS=false;if(incShip){if(pw>=freeT){dp=pw;iS=true}else{dp=pwo}}else{dp=pwo}const sh=incShip&&iS?ship:0,cm=dp*(comm/100);pf=dp-(bCost+sh+cm)}const ach=tq>0?(rq/tq)*100:0,achC=ach>=100?'var(--grn)':ach>=70?'var(--ylw)':'var(--red)',gR=dp*tq,gP=pf*tq,aR=dp*rq,aP=pf*rq;document.getElementById('bActResult').innerHTML=`<div style="margin-top:12px"><div class="mbh"><span>달성률</span><span style="color:${achC};font-weight:700">${pct(ach)}</span></div><div class="achieve-track"><div class="achieve-fill" style="width:${Math.min(ach,100)}%;background:${achC}"></div><div class="achieve-label">${fmt(rq)}/${fmt(tq)}</div></div><div class="rg" style="margin-top:10px"><div class="rb"><div class="rbl">목표 매출</div><div class="rbv rbv-sm" style="color:var(--dim)">${fmt(gR)}원</div></div><div class="rb"><div class="rbl">실적 매출</div><div class="rbv rbv-sm" style="color:var(--acl)">${fmt(aR)}원</div></div></div><div class="rg"><div class="rb"><div class="rbl">목표 이익</div><div class="rbv rbv-sm" style="color:var(--dim)">${fmt(gP)}원</div></div><div class="rb"><div class="rbl">실적 이익</div><div class="rbv rbv-sm" style="color:${aP>=0?'var(--grn)':'var(--red)'}">${fmt(aP)}원</div></div></div></div>`}
+/* Promo calc (with goal qty + sections) */
+function calcPromo(){
+  if(!costLoaded)return;
+  const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),pCost=pItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),qty=nv('pGoalQty'),hasItems=pCost>0;
+  document.getElementById('pContentSection').style.display=hasItems?'':'none';
+  document.getElementById('pResultSection').style.display=hasItems?'':'none';
+  document.getElementById('pExportSection').style.display=hasItems?'':'none';
+  if(mode==='discount'){
+    const bp=nv('pPrice'),bd=nv('pDisc');if(pCost<=0||bp<=0){document.getElementById('pRes').innerHTML=emH();document.getElementById('pGoalSummary').innerHTML='';document.getElementById('pScenario').innerHTML='';return}
+    const dp=bp*(1-bd/100),iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100),tot=pCost+sh+cm,pf=dp-tot,mg=dp>0?(pf/dp)*100:0;
+    const ir=pItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));
+    document.getElementById('pRes').innerHTML=resH(dp,pf,mg,pf<0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}],bp,bd);
+    if(qty>0){const tR=dp*qty,tP=pf*qty;const gpHtml=bd>0?`<div class="rbl">정상가</div><div style="font-size:11px;color:var(--faint);text-decoration:line-through">${fmt(bp)}원</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(dp)}원</div><div style="font-size:9px;color:var(--org)">−${bd}%</div>`:`<div class="rbl">판매가</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(dp)}원</div>`;document.getElementById('pGoalSummary').innerHTML=`<div class="cd-r"><div class="sl" style="color:var(--ylw)">🎯 목표 매출</div><div class="rg3"><div class="rb">${gpHtml}</div><div class="rb"><div class="rbl">예상 매출</div><div class="rbv rbv-sm" style="color:var(--acs)">${fmt(tR)}원</div></div><div class="rb"><div class="rbl">예상 이익</div><div class="rbv rbv-sm" style="color:${tP>=0?'var(--grn)':'var(--red)'}">${fmt(tP)}원</div></div></div></div>`}else{document.getElementById('pGoalSummary').innerHTML=''}
+    const rates=[0,5,10,15,20,25,30,35,40,45,50];let st='<div class="cd"><div class="sl" style="color:var(--dim)">📊 시나리오</div><table class="scenario-tbl"><thead><tr><th>할인</th><th>정상가</th><th>할인가</th><th>이익</th><th>마진</th></tr></thead><tbody>';
+    rates.forEach(d=>{const ddp=bp*(1-d/100),diS=ddp>=freeT,dsh=incShip?(diS?ship:0):0,dcm=ddp*(comm/100),dtot=pCost+dsh+dcm,dpf=ddp-dtot,dmg=ddp>0?(dpf/ddp)*100:0,c=dpf<0?'var(--red)':mc(dmg),sel=d===bd;st+=`<tr class="${sel?'sel-row':''}"><td>${d}%${sel?' ✓':''}</td><td style="color:var(--faint)">${fmt(bp)}원</td><td>${fmt(ddp)}원</td><td style="color:${c}">${fmt(dpf)}원</td><td style="color:${c};font-weight:700">${pct(dmg)}</td></tr>`});
+    st+='</tbody></table></div>';document.getElementById('pScenario').innerHTML=st;
+  }else{
+    const bt=nv('pTarg');if(pCost<=0||bt<=0){document.getElementById('pRes').innerHTML=emH();document.getElementById('pGoalSummary').innerHTML='';document.getElementById('pScenario').innerHTML='';return}
+    const d=1-comm/100-bt/100;if(d<=0){document.getElementById('pRes').innerHTML=trgH(null,0,1,[]);return}
+    let mp,iS=false;const pw=(pCost+(incShip?ship:0))/d,pwo=pCost/d;if(incShip){if(pw>=freeT){mp=pw;iS=true}else if(pwo<freeT){mp=pwo}else{mp=pw;iS=true}}else{mp=pwo}
+    const sh=incShip&&iS?ship:0,cm=mp*(comm/100),tot=pCost+sh+cm,pf=mp-tot;
+    const ir=pItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));
+    document.getElementById('pRes').innerHTML=trgH(mp,pf,0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}]);
+    if(qty>0){const tR=mp*qty,tP=pf*qty;document.getElementById('pGoalSummary').innerHTML=`<div class="cd-r"><div class="sl" style="color:var(--ylw)">🎯 목표</div><div class="rg3"><div class="rb"><div class="rbl">최소판매가</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(mp)}원</div></div><div class="rb"><div class="rbl">예상 매출</div><div class="rbv rbv-sm" style="color:var(--acs)">${fmt(tR)}원</div></div><div class="rb"><div class="rbl">예상 이익</div><div class="rbv rbv-sm" style="color:var(--grn)">${fmt(tP)}원</div></div></div></div>`}else{document.getElementById('pGoalSummary').innerHTML=''}
+    document.getElementById('pScenario').innerHTML='';
+  }}
 
-function emH(){return '<div class="es"><div class="ic">☝️</div><div class="mg">정보를 입력하면<br>결과가 나와요!</div></div>'}
-function crH(rows){return rows.map(r=>`<div class="cr${r.b?' tot':''}"><span class="cl">${r.l}</span><span class="cv" style="color:${r.b?'var(--ylw)':'var(--txt)'}">${r.v}</span></div>`).join('')}
-function resH(dp,pf,mg,loss,rows,origP,discR){const c=mc(isNaN(mg)?0:mg),w=Math.min(Math.max(isNaN(mg)?0:mg,0),100);const hasDisc=origP&&discR&&discR>0;const priceHtml=hasDisc?`<div class="rbl">판매가</div><div style="font-size:11px;color:var(--faint);text-decoration:line-through;margin-bottom:2px">${fmt(origP)}원</div><div class="rbv" style="color:var(--acl)">${fmt(dp)}원</div><div style="font-size:10px;color:var(--org);margin-top:1px">−${discR}%</div>`:`<div class="rbl">판매가</div><div class="rbv" style="color:var(--acl)">${fmt(dp)}원</div>`;return `<div class="cd-r"><div class="sl" style="color:var(--grn)">📊 결과</div><div class="rg"><div class="rb">${priceHtml}</div><div class="rb"><div class="rbl">순이익</div><div class="rbv" style="color:${pf>=0?'var(--grn)':'var(--red)'}">${fmt(pf)}원</div>${loss?'<div style="font-size:10px;color:var(--red)">⚠️ 적자!</div>':''}</div></div><div class="mb"><div class="mbh"><span>마진율</span><span style="color:${c};font-weight:700">${pct(mg)}</span></div><div class="mbt"><div class="mbf" style="width:${w}%;background:${c}"></div></div></div><div class="cb"><div class="ct">💰 원가 상세</div>${crH(rows)}</div>${loss?'<div class="wb">⚠️ 적자!</div>':''}</div>`}
-function trgH(mp,pf,imp,rows){if(imp)return `<div class="cd-r"><div class="wb">⚠️ 수수료+목표마진 &lt; 100% 필요</div></div>`;return `<div class="cd-r"><div class="sl" style="color:var(--grn)">📊 결과</div><div class="rg"><div class="rb"><div class="rbl">최소 판매가</div><div class="rbv" style="color:var(--acl)">${fmt(mp)}원</div></div><div class="rb"><div class="rbl">순이익</div><div class="rbv" style="color:var(--grn)">${fmt(pf)}원</div></div></div><div class="cb"><div class="ct">💰 원가 상세</div>${crH(rows)}</div></div>`}
-
-/* Planner */
-function initSeasons(){document.getElementById('seasonGrid').innerHTML=SEASONS.map(s=>`<button class="season-btn" data-id="${s.id}" onclick="pickSeason('${s.id}')">${s.label}</button>`).join('')}
-function pickSeason(id){document.querySelectorAll('.season-btn').forEach(b=>b.classList.toggle('on',b.dataset.id===id));
-  const recs=RECIPES.filter(r=>r.s.includes(id));
-  document.getElementById('pRecSection').style.display='';
-  document.getElementById('pRecList').innerHTML=recs.map(r=>{
-    const matchedProducts=P.filter(p=>r.match.some(m=>p.n.includes(m)));
-    const names=matchedProducts.slice(0,5).map(p=>p.n).join(', ');
-    const cost=matchedProducts.slice(0,3).reduce((s,p)=>(vat?p.vp:p.vm)+s,0);
-    return `<div class="rec-item"><div class="rec-name">${r.name}</div><div class="rec-detail">${names||'매칭 상품 없음'}</div>${cost?`<div class="rec-detail" style="margin-top:4px;color:var(--acl)">참고 원가: ${fmt(cost)}원~</div>`:''}</div>`;
-  }).join('')}
-
-/* Content helpers */
-function updateContentState(){}
+function calcPromoActual(){const rq=nv('pActQty'),tq=nv('pGoalQty');if(rq<=0||tq<=0){document.getElementById('pActResult').innerHTML='';return}const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),pCost=pItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);let dp=0,pf=0;if(mode==='discount'){const pr=nv('pPrice'),d=nv('pDisc');dp=pr*(1-d/100);const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(pCost+sh+cm)}else{const bt=nv('pTarg'),dd=1-comm/100-bt/100;if(dd<=0)return;const pw=(pCost+(incShip?ship:0))/dd,pwo=pCost/dd;let iS=false;if(incShip){if(pw>=freeT){dp=pw;iS=true}else{dp=pwo}}else{dp=pwo}const sh=incShip&&iS?ship:0,cm=dp*(comm/100);pf=dp-(pCost+sh+cm)}const ach=tq>0?(rq/tq)*100:0,achC=ach>=100?'var(--grn)':ach>=70?'var(--ylw)':'var(--red)',gR=dp*tq,gP=pf*tq,aR=dp*rq,aP=pf*rq;document.getElementById('pActResult').innerHTML=`<div style="margin-top:12px"><div class="mbh"><span>달성률</span><span style="color:${achC};font-weight:700">${pct(ach)}</span></div><div class="achieve-track"><div class="achieve-fill" style="width:${Math.min(ach,100)}%;background:${achC}"></div><div class="achieve-label">${fmt(rq)}/${fmt(tq)}</div></div><div class="rg" style="margin-top:10px"><div class="rb"><div class="rbl">목표 매출</div><div class="rbv rbv-sm" style="color:var(--dim)">${fmt(gR)}원</div></div><div class="rb"><div class="rbl">실적 매출</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(aR)}원</div></div></div><div class="rg"><div class="rb"><div class="rbl">목표 이익</div><div class="rbv rbv-sm" style="color:var(--dim)">${fmt(gP)}원</div></div><div class="rb"><div class="rbl">실적 이익</div><div class="rbv rbv-sm" style="color:${aP>=0?'var(--grn)':'var(--red)'}">${fmt(aP)}원</div></div></div></div>`}
 
 /* Export */
-function exportBundle(){const evN=sv('bEventName')||'기획전',startD=sv('bStart'),endD=sv('bEnd'),store=sv('bStore')||'스마트스토어',ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),bCost=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),qty=nv('bGoalQty'),rq=nv('bActQty'),memo=sv('bMemo');const bgText=sv('bBgText'),cpText=sv('bCpText');let dp=0,pf=0,mg=0,origP=0,discR=0;
-  if(mode==='discount'){const pr=nv('bPrice'),d=nv('bDisc');origP=pr;discR=d;dp=pr*(1-d/100);const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(bCost+sh+cm);mg=dp>0?(pf/dp)*100:0}else{const bt=nv('bTarg'),dd=1-comm/100-bt/100;if(dd>0){const pw=(bCost+(incShip?ship:0))/dd,pwo=bCost/dd;let iS=false;if(incShip){if(pw>=freeT){dp=pw;iS=true}else{dp=pwo}}else{dp=pwo}const sh=incShip&&iS?ship:0,cm=dp*(comm/100);pf=dp-(bCost+sh+cm);mg=dp>0?(pf/dp)*100:0}}
+function exportPromo(){const evN=sv('pEventName')||'기획전',startD=sv('pStart'),endD=sv('pEnd'),store=sv('pStore')||'스마트스토어',ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),pCost=pItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0),qty=nv('pGoalQty'),rq=nv('pActQty'),memo=sv('pMemo');const bgText=sv('pBgText'),cpText=sv('pCpText');let dp=0,pf=0,mg=0,origP=0,discR=0;
+  if(mode==='discount'){const pr=nv('pPrice'),d=nv('pDisc');origP=pr;discR=d;dp=pr*(1-d/100);const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(pCost+sh+cm);mg=dp>0?(pf/dp)*100:0}else{const bt=nv('pTarg'),dd=1-comm/100-bt/100;if(dd>0){const pw=(pCost+(incShip?ship:0))/dd,pwo=pCost/dd;let iS=false;if(incShip){if(pw>=freeT){dp=pw;iS=true}else{dp=pwo}}else{dp=pwo}const sh=incShip&&iS?ship:0,cm=dp*(comm/100);pf=dp-(pCost+sh+cm);mg=dp>0?(pf/dp)*100:0}}
   const tR=dp*qty,tP=pf*qty,aR=dp*rq,aP=pf*rq,ach=qty>0?(rq/qty)*100:0;
-  const iH=bItems.filter(i=>i.pc).map(i=>`<tr><td>${gn(i.pc)}</td><td style="text-align:right">${fmt(gc(i.pc))}원</td><td style="text-align:center">${i.q}</td><td style="text-align:right">${fmt(gc(i.pc)*(i.q||0))}원</td></tr>`).join('');
+  const iH=pItems.filter(i=>i.pc).map(i=>`<tr><td>${gn(i.pc)}</td><td style="text-align:right">${fmt(gc(i.pc))}원</td><td style="text-align:center">${i.q}</td><td style="text-align:right">${fmt(gc(i.pc)*(i.q||0))}원</td></tr>`).join('');
   const hR=rq>0;const hasBg=bgText.length>0,hasCp=cpText.length>0;
-  const priceHtml=discR>0?`<tr><td>정상 판매가</td><td style="text-align:right;color:#64748b;text-decoration:line-through">${fmt(origP)}원</td></tr><tr><td>할인가 (−${discR}%)</td><td style="text-align:right;font-weight:700;color:#4c1d95">${fmt(dp)}원</td></tr>`:`<tr><td>판매가</td><td style="text-align:right;font-weight:700;color:#4c1d95">${fmt(dp)}원</td></tr>`;
+  const priceHtml=discR>0?`<tr><td>정상 판매가</td><td style="text-align:right;color:#64748b;text-decoration:line-through">${fmt(origP)}원</td></tr><tr><td>할인가 (−${discR}%)</td><td style="text-align:right;font-weight:700;color:#c45e1a">${fmt(dp)}원</td></tr>`:`<tr><td>판매가</td><td style="text-align:right;font-weight:700;color:#c45e1a">${fmt(dp)}원</td></tr>`;
   let secNum=1;
-  const html=`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${evN}</title><link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"><style>body{font-family:'Pretendard',sans-serif;max-width:700px;margin:40px auto;padding:20px 30px;color:#1e293b;line-height:1.8;font-size:14px}h1{font-size:22px;font-weight:800;color:#1e1b4b}.sub{font-size:13px;color:#64748b;margin-bottom:30px}h2{font-size:16px;font-weight:700;color:#4c1d95;margin-top:30px;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #e9d5ff}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th{background:#f5f3ff;padding:10px 12px;text-align:left;font-weight:600;border-bottom:2px solid #e9d5ff;color:#4c1d95}td{padding:10px 12px;border-bottom:1px solid #f1f5f9}.m{display:inline-block;background:#f5f3ff;border-radius:10px;padding:14px 20px;margin:6px;text-align:center;min-width:130px}.ml{font-size:11px;color:#64748b;margin-bottom:4px}.mv{font-size:20px;font-weight:700;color:#4c1d95}.mv.g{color:#059669}.mv.r{color:#dc2626}.bg{background:#faf5ff;border-left:3px solid #a78bfa;padding:14px 18px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.9;white-space:pre-wrap}.cp{background:#f0fdf4;border-left:3px solid #34d399;padding:14px 18px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.9;white-space:pre-wrap}.bar{height:20px;background:#f1f5f9;border-radius:10px;overflow:hidden;position:relative;margin:8px 0}.bf{height:100%;border-radius:10px}.bl{position:absolute;right:8px;top:0;height:100%;display:flex;align-items:center;font-size:11px;font-weight:700;color:#fff}.ft{margin-top:40px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;text-align:center}@media print{body{margin:0;padding:20px}}</style></head><body>
+  const html=`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${evN}</title><link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"><style>body{font-family:'Pretendard',sans-serif;max-width:700px;margin:40px auto;padding:20px 30px;color:#2d2a26;line-height:1.8;font-size:14px;background:#faf8f5}h1{font-size:22px;font-weight:800;color:#c45e1a}.sub{font-size:13px;color:#7a746c;margin-bottom:30px}h2{font-size:16px;font-weight:700;color:#c45e1a;margin-top:30px;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #f0d4be}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th{background:#fff5ee;padding:10px 12px;text-align:left;font-weight:600;border-bottom:2px solid #f0d4be;color:#c45e1a}td{padding:10px 12px;border-bottom:1px solid #f5f2ee}.m{display:inline-block;background:#fff5ee;border-radius:10px;padding:14px 20px;margin:6px;text-align:center;min-width:130px}.ml{font-size:11px;color:#7a746c;margin-bottom:4px}.mv{font-size:20px;font-weight:700;color:#c45e1a}.mv.g{color:#2e8b57}.mv.r{color:#c94040}.bg{background:#fff5ee;border-left:3px solid #e07a3a;padding:14px 18px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.9;white-space:pre-wrap}.cp{background:#f0faf4;border-left:3px solid #2e8b57;padding:14px 18px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.9;white-space:pre-wrap}.bar{height:20px;background:#f5f2ee;border-radius:10px;overflow:hidden;position:relative;margin:8px 0}.bf{height:100%;border-radius:10px}.bl{position:absolute;right:8px;top:0;height:100%;display:flex;align-items:center;font-size:11px;font-weight:700;color:#fff}.ft{margin-top:40px;padding-top:16px;border-top:1px solid #e8e0d8;font-size:11px;color:#9e978e;text-align:center}@media print{body{margin:0;padding:20px}}</style></head><body>
 <h1>📋 ${evN}</h1><div class="sub">${store}${startD?' · '+startD+' ~ '+endD:''}</div>
 ${hasBg?`<h2>${secNum++}. 기획 배경</h2><div class="bg">${bgText.replace(/\n/g,'<br>')}</div>`:''}
-<h2>${secNum++}. 상품 구성</h2><table><thead><tr><th>상품명</th><th style="text-align:right">단가</th><th style="text-align:center">수량</th><th style="text-align:right">소계</th></tr></thead><tbody>${iH}<tr style="font-weight:700;border-top:2px solid #e9d5ff"><td>합계</td><td></td><td></td><td style="text-align:right">${fmt(bCost)}원</td></tr></tbody></table>
-<h2>${secNum++}. 가격 전략</h2><table><tbody>${priceHtml}<tr><td>건당 순이익</td><td style="text-align:right;color:${pf>=0?'#059669':'#dc2626'}">${fmt(pf)}원 (${pct(mg)})</td></tr></tbody></table>
+<h2>${secNum++}. 상품 구성</h2><table><thead><tr><th>상품명</th><th style="text-align:right">단가</th><th style="text-align:center">수량</th><th style="text-align:right">소계</th></tr></thead><tbody>${iH}<tr style="font-weight:700;border-top:2px solid #f0d4be"><td>합계</td><td></td><td></td><td style="text-align:right">${fmt(pCost)}원</td></tr></tbody></table>
+<h2>${secNum++}. 가격 전략</h2><table><tbody>${priceHtml}<tr><td>건당 순이익</td><td style="text-align:right;color:${pf>=0?'#2e8b57':'#c94040'}">${fmt(pf)}원 (${pct(mg)})</td></tr></tbody></table>
 <h2>${secNum++}. 매출 목표</h2><div style="text-align:center"><div class="m"><div class="ml">목표</div><div class="mv">${fmt(qty)}개</div></div><div class="m"><div class="ml">예상 매출</div><div class="mv">${fmt(tR)}원</div></div><div class="m"><div class="ml">예상 이익</div><div class="mv ${tP>=0?'g':'r'}">${fmt(tP)}원</div></div></div>
 ${hasCp?`<h2>${secNum++}. 기획전 문구</h2><div class="cp">${cpText.replace(/\n/g,'<br>')}</div>`:''}
-${hR?`<h2>${secNum++}. 실적</h2><div style="display:flex;justify-content:space-between;font-size:13px"><span>달성률</span><span style="font-weight:700;color:${ach>=100?'#059669':ach>=70?'#d97706':'#dc2626'}">${pct(ach)}</span></div><div class="bar"><div class="bf" style="width:${Math.min(ach,100)}%;background:${ach>=100?'#059669':ach>=70?'#d97706':'#dc2626'}"><div class="bl">${fmt(rq)}/${fmt(qty)}</div></div></div><div style="text-align:center;margin-top:12px"><div class="m"><div class="ml">실적 매출</div><div class="mv">${fmt(aR)}원</div></div><div class="m"><div class="ml">실적 이익</div><div class="mv ${aP>=0?'g':'r'}">${fmt(aP)}원</div></div></div>${memo?'<p style="margin-top:14px"><strong>비고:</strong> '+memo+'</p>':''}`:''} 
+${hR?`<h2>${secNum++}. 실적</h2><div style="display:flex;justify-content:space-between;font-size:13px"><span>달성률</span><span style="font-weight:700;color:${ach>=100?'#2e8b57':ach>=70?'#d4a017':'#c94040'}">${pct(ach)}</span></div><div class="bar"><div class="bf" style="width:${Math.min(ach,100)}%;background:${ach>=100?'#2e8b57':ach>=70?'#d4a017':'#c94040'}"><div class="bl">${fmt(rq)}/${fmt(qty)}</div></div></div><div style="text-align:center;margin-top:12px"><div class="m"><div class="ml">실적 매출</div><div class="mv">${fmt(aR)}원</div></div><div class="m"><div class="ml">실적 이익</div><div class="mv ${aP>=0?'g':'r'}">${fmt(aP)}원</div></div></div>${memo?'<p style="margin-top:14px"><strong>비고:</strong> '+memo+'</p>':''}`:''} 
 <div class="ft">㈜스타원엔터테인먼트 · 톰토미 · ${new Date().toLocaleDateString('ko-KR')}</div></body></html>`;
   const blob=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`기획전_${evN}_${new Date().toISOString().slice(0,10)}.html`;a.click();URL.revokeObjectURL(a.href)}
 
 /* Init */
 document.addEventListener('click',e=>{if(!e.target.closest('.sw'))document.querySelectorAll('.dd').forEach(d=>d.classList.remove('open'))});
 document.querySelectorAll('.fi[inputmode="decimal"],.fi[inputmode="numeric"]').forEach(el=>el.addEventListener('input',()=>{el.value=el.value.replace(/[^0-9.]/g,'')}));
-initSeasons();
+setupDragDrop('costZone','costFile');
+setupDragDrop('storeZone','storeFile');
 </script>
 </body>
 </html>
