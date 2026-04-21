@@ -238,7 +238,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Go
 <div id="sec-promo" style="display:none">
   <div class="cd"><div class="sl">📋 기획전 정보</div>
     <div class="fg"><label class="fl">기획전명</label><input class="fi fi-txt" id="pEventName" placeholder="예: 어린이날 톰토미 특별전"></div>
-    <div class="fg"><label class="fl">행사 기간</label><div class="fr"><input class="fi fi-sm" id="pStart" type="date" style="font-size:13px"><span class="dvt">~</span><input class="fi fi-sm" id="pEnd" type="date" style="font-size:13px"></div></div>
+    <div class="fg"><label class="fl">행사 기간</label><div class="fr"><input class="fi fi-sm" id="pStart" type="text" inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10" style="font-size:13px" oninput="autoDateFormat(this)" onkeydown="dateTabNav(event,this,'pEnd')"><span class="dvt">~</span><input class="fi fi-sm" id="pEnd" type="text" inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10" style="font-size:13px" oninput="autoDateFormat(this)" onkeydown="dateTabNav(event,this,'pStart')"></div></div>
     <div class="fg"><label class="fl">판매 채널</label><input class="fi fi-txt" id="pStore" value="네이버 스마트스토어"></div>
   </div>
   <!-- 번들 카드들이 여기 렌더링 -->
@@ -289,7 +289,7 @@ async function sbFetch(path,opts={}){
   if(!res.ok){const t=await res.text();throw new Error(t)}
   const text=await res.text();return text?JSON.parse(text):null;
 }
-function todayKST(){const d=new Date();d.setHours(d.getHours()+9);return d.toISOString().slice(0,10)}
+function todayKST(){const d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Seoul'}));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 
 /* ═══ DATA ═══ */
 let P=[];
@@ -318,7 +318,7 @@ async function checkAlerts(){
   try{
     const today=todayKST();
     // Auto-update: draft→active if start_date passed
-    await sbFetch(`promo_history?status=eq.draft&start_date=lte.${today}`,{method:'PATCH',body:JSON.stringify({status:'active',updated_at:new Date().toISOString()})});
+    try{await sbFetch(`promo_history?status=eq.draft&start_date=lte.${today}`,{method:'PATCH',body:JSON.stringify({status:'active',updated_at:new Date().toISOString()}),prefer:'return=minimal'})}catch(e){}
     // Find: ended but not done
     const alerts=await sbFetch(`promo_history?status=neq.done&end_date=lt.${today}&select=id,event_name,end_date&order=end_date.desc`);
     const area=document.getElementById('alertArea');
@@ -382,7 +382,7 @@ function loadStoreCSV(input){
 }
 
 /* ═══ UI ═══ */
-function switchTab(t){tab=t;document.querySelectorAll('#mainTab button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));['single','bundle','promo','history'].forEach(s=>document.getElementById('sec-'+s).style.display=s===t?'':'none');document.getElementById('modeTab').style.display=(t==='history')?'none':'flex';calc();calcBundle();calcPromo();if(t==='history')renderHistory()}
+function switchTab(t){tab=t;document.querySelectorAll('#mainTab button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));['single','bundle','promo','history'].forEach(s=>document.getElementById('sec-'+s).style.display=s===t?'':'none');document.getElementById('modeTab').style.display=(t==='history'||t==='promo')?'none':'flex';calc();calcBundle();calcPromo();if(t==='history')renderHistory()}
 function switchMode(m){mode=m;document.querySelectorAll('#modeTab button').forEach(b=>b.classList.toggle('on2',b.dataset.mode===m));['sDiscF','bDiscF'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=m==='discount'?'':'none'});['sTargF','bTargF'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=m==='target'?'':'none'});calc();calcBundle();calcPromo()}
 function togVat(){vat=!vat;document.getElementById('vatT').style.background=vat?'var(--ac)':'var(--bdr)';document.getElementById('vatM').style.left=vat?'21px':'3px';document.getElementById('vatH').textContent=vat?'✅ VAT+':'❌ VAT−';if(selCode){document.getElementById('sManual').value=Math.round(gc(selCode));updateSelInfo()}renderBI();renderPromoBundles();calc();calcBundle();calcPromo()}
 function togShip(){incShip=!incShip;document.getElementById('shipT').style.background=incShip?'var(--ac)':'var(--bdr)';document.getElementById('shipM').style.left=incShip?'21px':'3px';document.getElementById('shipH').textContent=incShip?'✅ 조건부 무배':'❌ 배송비 제외';calc();calcBundle();calcPromo()}
@@ -392,10 +392,26 @@ function updateSelInfo(){if(!selCode)return;const sp=gsp(selCode),hp=ghp(selCode
 /* Keyboard nav */
 function ddKeyNav(e,ddId){const dd=document.getElementById(ddId);if(!dd||!dd.classList.contains('open'))return;const items=[...dd.querySelectorAll('.di')];if(!items.length)return;const cur=dd.querySelector('.di.active');let idx=cur?items.indexOf(cur):-1;if(e.key==='ArrowDown'){e.preventDefault();if(cur)cur.classList.remove('active');idx=Math.min(idx+1,items.length-1);items[idx].classList.add('active');items[idx].scrollIntoView({block:'nearest'})}else if(e.key==='ArrowUp'){e.preventDefault();if(cur)cur.classList.remove('active');idx=Math.max(idx-1,0);items[idx].classList.add('active');items[idx].scrollIntoView({block:'nearest'})}else if(e.key==='Enter'){e.preventDefault();if(cur)cur.click();else if(items.length)items[0].click()}else if(e.key==='Escape'){dd.classList.remove('open')}}
 
+/* Date input helpers */
+function autoDateFormat(el){
+  let v=el.value.replace(/[^0-9]/g,'');
+  if(v.length>8)v=v.slice(0,8);
+  let formatted='';
+  if(v.length>4){formatted=v.slice(0,4)+'-'+v.slice(4);if(v.length>6)formatted=v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6)}
+  else{formatted=v}
+  el.value=formatted;
+  // 다 입력되면(10자) 다음 필드로 자동 이동
+  if(formatted.length===10){const nextId=el.id==='pStart'?'pEnd':null;if(nextId)document.getElementById(nextId).focus()}
+}
+function dateTabNav(e,el,otherId){
+  if(e.key==='Tab'&&!e.shiftKey&&el.id==='pEnd'){e.preventDefault();document.getElementById('pStart').focus();document.getElementById('pStart').select()}
+  else if(e.key==='Tab'&&e.shiftKey&&el.id==='pStart'){e.preventDefault();document.getElementById('pEnd').focus();document.getElementById('pEnd').select()}
+}
+
 /* Single search */
 function filterSD(){const dd=document.getElementById('sDD'),t=document.getElementById('sSearch').value.toLowerCase(),f=t?P.filter(p=>p.n.toLowerCase().includes(t)||p.c.toLowerCase().includes(t)):P;dd.innerHTML=f.length?f.slice(0,30).map(p=>`<div class="di" data-c="${p.c}"><div class="dn">${p.n}</div><div class="ds">${p.c} · 원가 ${fmt(vat?p.vp:p.vm)}원</div>${p.sp?`<div class="dp">판매가 ${fmt(p.sp)}원 → ${fmt(p.hp)}원</div>`:''}</div>`).join(''):'<div class="de">검색 결과 없음</div>';dd.querySelectorAll('.di').forEach(el=>el.addEventListener('click',()=>{selCode=el.dataset.c;document.getElementById('sSearch').value=gn(selCode);document.getElementById('sManual').value=Math.round(gc(selCode));const sp=gsp(selCode);if(sp&&!nv('sPrice'))document.getElementById('sPrice').value=sp;updateSelInfo();dd.classList.remove('open');calc()}));dd.classList.add('open')}
 function openSD(){filterSD();document.getElementById('sDD').classList.add('open')}
-function onManual(){document.getElementById('sManual').value=document.getElementById('sManual').value.replace(/[^0-9.]/g,'');selCode='';document.getElementById('sSearch').value='';document.getElementById('sSel').textContent='';document.getElementById('sPriceHint').textContent='';calc()}
+function onManual(){let v=document.getElementById('sManual').value.replace(/[^0-9.]/g,'');const parts=v.split('.');if(parts.length>2)v=parts[0]+'.'+parts.slice(1).join('');document.getElementById('sManual').value=v;selCode='';document.getElementById('sSearch').value='';document.getElementById('sSel').textContent='';document.getElementById('sPriceHint').textContent='';calc()}
 
 /* Bundle items */
 function renderBI(){document.getElementById('bItems').innerHTML=bItems.map((it,i)=>{const sp=it.pc?gsp(it.pc):0;return `<div class="bi"><div class="bih"><span class="bin">상품 ${i+1}</span>${bItems.length>1?`<button class="brm" onclick="rmBI(${i})">×</button>`:''}</div><div class="sw"><input class="fi fi-sm" id="bS${i}" placeholder="제품 검색..." value="${it.pc?gn(it.pc):''}" oninput="filterBD(${i})" onfocus="openBD(${i})" onkeydown="ddKeyNav(event,'bD${i}')">${it.pc?`<div class="ss">✓ ${gn(it.pc)} — 원가 ${fmt(gc(it.pc))}원${sp?' · 판매가 '+fmt(sp)+'원':''}</div>`:''}<div class="dd" id="bD${i}"></div></div><div><label class="fl" style="font-size:11px">수량</label><input class="fi qi" id="bQ${i}" inputmode="numeric" value="${it.q}" oninput="upBQ(${i})" style="font-size:13px"></div></div>`}).join('');updBSum()}
@@ -586,7 +602,7 @@ function exportPromo(){
     const c=getBundleCalc(b);
     const dp=c.dp,pf=c.pf,mg=c.mg;
     // 상품 테이블: 상품명 / 원가 / 판매가 / 할인가 / 수량
-    const iH=b.items.filter(i=>i.pc).map(i=>'<tr><td>'+gn(i.pc)+'</td><td style="text-align:right">'+fmt(gc(i.pc))+'원</td><td style="text-align:right">'+fmt(gsp(i.pc))+'원</td><td style="text-align:right">'+fmt(ghp(i.pc))+'원</td><td style="text-align:center">'+i.q+'</td></tr>').join('');
+    const iH=b.items.filter(i=>i.pc).map(i=>'<tr><td>'+gn(i.pc)+'</td><td style="text-align:right">'+fmt(gc(i.pc))+'원</td><td style="text-align:right">'+(gsp(i.pc)?fmt(gsp(i.pc))+'원':'—')+'</td><td style="text-align:right">'+(ghp(i.pc)?fmt(ghp(i.pc))+'원':'—')+'</td><td style="text-align:center">'+i.q+'</td></tr>').join('');
     // 합계
     const spTot=b.items.filter(i=>i.pc).reduce((s,i)=>s+gsp(i.pc)*(i.q||0),0);
     const hpTot=b.items.filter(i=>i.pc).reduce((s,i)=>s+ghp(i.pc)*(i.q||0),0);
