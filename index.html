@@ -268,7 +268,7 @@ function todayKST(){const d=new Date(new Date().toLocaleString('en-US',{timeZone
 /* ═══ DATA ═══ */
 let P=[],tab='single',mode='discount',vat=true,incShip=true,selCode='';
 let bItems=[{pc:'',q:1}];
-let promoBundles=[{name:'번들 A',items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false}];
+let promoBundles=[{name:'번들 A',items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,special_price:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false}];
 let costLoaded=false,editingPromoId=null,promoList=[];
 let csvData=null; // CSV 원본 저장용
 
@@ -368,13 +368,13 @@ function renderPromoBundles(){
     if(b.actual_qty>0&&b.goal_qty>0){const ach=(b.actual_qty/b.goal_qty)*100,achC=ach>=100?'var(--grn)':ach>=70?'var(--ylw)':'var(--red)',aR=dp*b.actual_qty,aP=pf*b.actual_qty;actHtml=`<div style="margin-top:8px"><div class="mbh"><span>달성률</span><span style="color:${achC};font-weight:700">${pct(ach)}</span></div><div class="achieve-track"><div class="achieve-fill" style="width:${Math.min(ach,100)}%;background:${achC}"></div><div class="achieve-label">${fmt(b.actual_qty)}/${fmt(b.goal_qty)}</div></div><div class="rg" style="margin-top:8px"><div class="rb"><div class="rbl">실적 매출</div><div class="rbv rbv-sm" style="color:var(--ac)">${fmt(aR)}원</div></div><div class="rb"><div class="rbl">실적 이익</div><div class="rbv rbv-sm" style="color:${aP>=0?'var(--grn)':'var(--red)'}">${fmt(aP)}원</div></div></div></div>`}
     const isCollapsed=b.collapsed;
     const discAmt=b.price>0&&b.discount>0?Math.round(b.price*b.discount/100):0;
-    const specialPrice=b.price>0?b.price-discAmt:0;
+    const specialPrice=b.special_price||(b.price>0?b.price-discAmt:0);
     return `<div class="bundle-card"><div class="bundle-card-hdr"><input value="${b.name}" onchange="promoBundles[${bi}].name=this.value" placeholder="번들 이름"><button class="bundle-collapse" onclick="promoBundles[${bi}].collapsed=!promoBundles[${bi}].collapsed;renderPromoBundles()">${isCollapsed?'▸ 펼치기':'▾ 접기'}</button>${promoBundles.length>1?`<button class="brm" onclick="rmPromoBundle(${bi})" style="font-size:18px" title="번들 삭제">×</button>`:''}</div>
     <div style="${isCollapsed?'display:none':''}">
     <div>${itemsHtml}<button class="bab" onclick="addPBI(${bi})" style="margin-bottom:10px">+ 상품 추가</button>${cost>0?`<div class="bsm"><div class="bsr"><span>원가 합계 (${cnt}개)</span><span style="font-weight:700;font-family:monospace">${fmt(cost)}원</span></div>${spTot>0?`<div class="bsr" style="margin-top:4px;font-size:11px"><span>개별 판매가 합계</span><span>${fmt(spTot)}원</span></div>`:''}${hpTot>0&&hpTot!==spTot?`<div class="bsr" style="margin-top:2px;font-size:11px"><span>개별 할인가 합계</span><span style="color:var(--ac)">${fmt(hpTot)}원</span></div>`:''}</div>`:''}</div>
     <div style="margin-top:10px">
       <div class="row"><div><div class="fg"><label class="fl">판매가 (정가)</label><div class="fr"><input class="fi" id="pbPr${bi}" inputmode="decimal" value="${b.price||''}" placeholder="정가" oninput="promoBundles[${bi}].price=parseFloat(this.value)||0;syncDiscFromRate(${bi})"><span class="fs">원</span></div></div></div><div><div class="fg"><label class="fl">할인율</label><div class="fr"><input class="fi" id="pbDc${bi}" inputmode="decimal" value="${b.discount||''}" placeholder="0" oninput="onDiscRateInput(${bi})"><span class="fs">%</span></div></div></div></div>
-      <div class="row"><div><div class="fg"><label class="fl">할인금액</label><div class="fr"><input class="fi" id="pbDa${bi}" inputmode="numeric" value="${discAmt||''}" placeholder="0" oninput="onDiscAmtInput(${bi})"><span class="fs">원</span></div></div></div><div><div class="fg"><label class="fl">기획전 특가</label><div class="fr" style="position:relative"><input class="fi" id="pbSp${bi}" value="${specialPrice?fmt(specialPrice):''}" disabled style="font-size:14px;font-weight:700;color:var(--acs);background:var(--acd)"><span class="fs">원</span></div></div></div></div>
+      <div class="row"><div><div class="fg"><label class="fl">할인금액</label><div class="fr"><input class="fi" id="pbDa${bi}" inputmode="numeric" value="${discAmt||''}" placeholder="0" oninput="onDiscAmtInput(${bi})"><span class="fs">원</span></div></div></div><div><div class="fg"><label class="fl">기획전 특가</label><div class="fr"><input class="fi" id="pbSp${bi}" inputmode="numeric" value="${specialPrice||''}" placeholder="특가 입력" oninput="onSpecialPriceInput(${bi})" style="font-size:14px;font-weight:700;color:var(--acs)"><span class="fs">원</span></div></div></div></div>
       <div class="row"><div><div class="fg"><label class="fl">목표 수량</label><div class="fr"><input class="fi" id="pbGq${bi}" inputmode="numeric" value="${b.goal_qty||''}" placeholder="예: 100" oninput="promoBundles[${bi}].goal_qty=parseInt(this.value)||0;updateBundleResult(${bi})"><span class="fs">개</span></div></div></div><div><div class="fg"><label class="fl">실적 수량</label><div class="fr"><input class="fi" id="pbAq${bi}" inputmode="numeric" value="${b.actual_qty||''}" placeholder="0" oninput="promoBundles[${bi}].actual_qty=parseInt(this.value)||0;updateBundleResult(${bi})"><span class="fs">개</span></div></div></div></div>
     </div>
     <div class="fg" style="margin-top:8px"><label class="fl">번들 비고</label><textarea class="textarea" id="pbMm${bi}" placeholder="이 번들에 대한 메모" style="min-height:40px" onchange="promoBundles[${bi}].memo=this.value">${b.memo||''}</textarea></div>
@@ -401,7 +401,7 @@ function updatePromoSummary(){
   const avgMg=margins.length?margins.reduce((a,b)=>a+b,0)/margins.length:0;
   area.innerHTML=`<div class="cd-r"><div class="sl" style="color:var(--ylw)">📊 기획전 전체 요약 (${validBundles.length}개 번들)</div><div class="promo-summary"><div class="rb"><div class="rbl">총 원가</div><div class="rbv rbv-sm">${fmt(totalCost)}원</div></div><div class="rb"><div class="rbl">총 목표</div><div class="rbv rbv-sm">${fmt(totalGoal)}개</div></div><div class="rb"><div class="rbl">예상 매출</div><div class="rbv rbv-sm" style="color:var(--acs)">${fmt(totalRev)}원</div></div><div class="rb"><div class="rbl">예상 이익</div><div class="rbv rbv-sm" style="color:${totalProf>=0?'var(--grn)':'var(--red)'}">${fmt(totalProf)}원</div></div><div class="rb"><div class="rbl">평균 마진</div><div class="rbv rbv-sm" style="color:${mc(avgMg)}">${pct(avgMg)}</div></div></div></div>`;
 }
-function addPromoBundle(){promoBundles.push({name:'번들 '+String.fromCharCode(65+promoBundles.length),items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false});renderPromoBundles()}
+function addPromoBundle(){promoBundles.push({name:'번들 '+String.fromCharCode(65+promoBundles.length),items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,special_price:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false});renderPromoBundles()}
 function rmPromoBundle(bi){if(promoBundles.length<=1)return;if(!confirm(promoBundles[bi].name+' 을(를) 삭제할까요?'))return;promoBundles.splice(bi,1);renderPromoBundles()}
 function addPBI(bi){promoBundles[bi].items.push({pc:'',q:1,msp:0,mhp:0});renderPromoBundles()}
 function rmPBI(bi,ii){if(promoBundles[bi].items.length<=1)return;promoBundles[bi].items.splice(ii,1);renderPromoBundles()}
@@ -416,8 +416,10 @@ function onDiscRateInput(bi){
   const price=promoBundles[bi].price;
   if(price>0){
     const amt=Math.round(price*rate/100);
+    const sp=price-amt;
     document.getElementById('pbDa'+bi).value=amt||'';
-    document.getElementById('pbSp'+bi).value=fmt(price-amt);
+    document.getElementById('pbSp'+bi).value=sp||'';
+    promoBundles[bi].special_price=sp;
   }
   updateBundleResult(bi);
 }
@@ -427,9 +429,25 @@ function onDiscAmtInput(bi){
   const price=promoBundles[bi].price;
   if(price>0){
     const rate=Math.round((amt/price)*10000)/100;
+    const sp=price-amt;
+    promoBundles[bi].discount=rate;
+    promoBundles[bi].special_price=sp;
+    document.getElementById('pbDc'+bi).value=rate||'';
+    document.getElementById('pbSp'+bi).value=sp||'';
+  }
+  updateBundleResult(bi);
+}
+/* 기획전 특가 직접 입력 → 할인율/할인금액 역산 */
+function onSpecialPriceInput(bi){
+  const sp=parseInt(document.getElementById('pbSp'+bi).value)||0;
+  promoBundles[bi].special_price=sp;
+  const price=promoBundles[bi].price;
+  if(price>0&&sp>0){
+    const amt=price-sp;
+    const rate=Math.round((amt/price)*10000)/100;
     promoBundles[bi].discount=rate;
     document.getElementById('pbDc'+bi).value=rate||'';
-    document.getElementById('pbSp'+bi).value=fmt(price-amt);
+    document.getElementById('pbDa'+bi).value=amt||'';
   }
   updateBundleResult(bi);
 }
@@ -439,10 +457,13 @@ function syncDiscFromRate(bi){
   const rate=promoBundles[bi].discount;
   if(price>0&&rate>0){
     const amt=Math.round(price*rate/100);
+    const sp=price-amt;
+    promoBundles[bi].special_price=sp;
     document.getElementById('pbDa'+bi).value=amt||'';
-    document.getElementById('pbSp'+bi).value=fmt(price-amt);
+    document.getElementById('pbSp'+bi).value=sp||'';
   }else if(price>0){
-    document.getElementById('pbSp'+bi).value=fmt(price);
+    promoBundles[bi].special_price=price;
+    document.getElementById('pbSp'+bi).value=price||'';
   }
   updateBundleResult(bi);
 }
@@ -472,11 +493,11 @@ function calc(){if(tab!=='single'||!costLoaded)return;const ship=nv('xShip'),fre
 function calcBundle(){if(!costLoaded)return;const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm'),bCost=bItems.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);if(mode==='discount'){const bp=nv('bPrice'),bd=nv('bDisc');if(bCost<=0||bp<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bScenario').innerHTML='';return}const dp=bp*(1-bd/100),iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100),tot=bCost+sh+cm,pf=dp-tot,mg=dp>0?(pf/dp)*100:0;const ir=bItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));document.getElementById('bRes').innerHTML=resH(dp,pf,mg,pf<0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}],bp,bd);const rates=[0,5,10,15,20,25,30,35,40,45,50];let st='<div class="cd"><div class="sl" style="color:var(--dim)">📊 시나리오</div><table class="scenario-tbl"><thead><tr><th>할인</th><th>정상가</th><th>할인가</th><th>이익</th><th>마진</th></tr></thead><tbody>';rates.forEach(d=>{const ddp=bp*(1-d/100),diS=ddp>=freeT,dsh=incShip?(diS?ship:0):0,dcm=ddp*(comm/100),dtot=bCost+dsh+dcm,dpf=ddp-dtot,dmg=ddp>0?(dpf/ddp)*100:0,c=dpf<0?'var(--red)':mc(dmg),sel=Math.abs(d-bd)<0.01;st+=`<tr class="${sel?'sel-row':''}"><td>${d}%${sel?' ✓':''}</td><td style="color:var(--faint)">${fmt(bp)}원</td><td>${fmt(ddp)}원</td><td style="color:${c}">${fmt(dpf)}원</td><td style="color:${c};font-weight:700">${pct(dmg)}</td></tr>`});st+='</tbody></table></div>';document.getElementById('bScenario').innerHTML=st}else{const bt=nv('bTarg');if(bCost<=0||bt<=0){document.getElementById('bRes').innerHTML=emH();document.getElementById('bScenario').innerHTML='';return}const d=1-comm/100-bt/100;if(d<=0){document.getElementById('bRes').innerHTML=trgH(null,0,1,[]);return}let mp,iS=false;const pw=(bCost+(incShip?ship:0))/d,pwo=bCost/d;if(incShip){if(pw>=freeT){mp=pw;iS=true}else if(pwo<freeT){mp=pwo}else{mp=pw;iS=true}}else{mp=pwo}const sh=incShip&&iS?ship:0,cm=mp*(comm/100),tot=bCost+sh+cm,pf=mp-tot;const ir=bItems.filter(i=>i.pc).map(i=>({l:`${gn(i.pc)} ×${i.q}`,v:fmt(gc(i.pc)*(i.q||0))+'원'}));document.getElementById('bRes').innerHTML=trgH(mp,pf,0,[...ir,{l:`수수료 (${comm}%)`,v:fmt(cm)+'원'},{l:`배송비 ${shl(incShip,iS)}`,v:fmt(sh)+'원'},{l:'총 원가',v:fmt(tot)+'원',b:1}]);document.getElementById('bScenario').innerHTML=''}}
 
 /* ═══ PROMO SAVE/LOAD ═══ */
-function getBundleCalc(b){const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm');const cost=b.items.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);let dp=0,pf=0,mg=0;if(cost>0&&b.price>0){dp=b.price*(1-(b.discount||0)/100);const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(cost+sh+cm);mg=dp>0?(pf/dp)*100:0}return{cost,dp,pf,mg}}
-function getPromoData(){const evName=sv('pEventName');if(!evName){alert('기획전명을 입력해주세요!');return null}const today=todayKST(),startD=sv('pStart'),endD=sv('pEnd');const hasActual=promoBundles.some(b=>b.actual_qty>0);let status='draft';if(hasActual)status='done';else if(startD&&startD<=today)status='active';const bundlesData=promoBundles.map(b=>{const c=getBundleCalc(b);return{name:b.name,items:b.items.filter(i=>i.pc).map(i=>({code:i.pc,name:gn(i.pc),qty:i.q,cost:gc(i.pc),msp:i.msp||0,mhp:i.mhp||0})),price:b.price,discount:b.discount||0,goal_qty:b.goal_qty||0,actual_qty:b.actual_qty||0,memo:b.memo||'',margin_rate:Math.round(c.mg*10)/10,profit_per_unit:Math.round(c.pf)}});const totalGoal=promoBundles.reduce((s,b)=>s+(b.goal_qty||0),0);const totalActual=promoBundles.reduce((s,b)=>s+(b.actual_qty||0),0);const avgMargin=bundlesData.length?bundlesData.reduce((s,b)=>s+b.margin_rate,0)/bundlesData.length:0;return{event_name:evName,channel:sv('pStore')||'스마트스토어',start_date:startD||null,end_date:endD||null,bundles:bundlesData,price:0,discount:0,goal_qty:totalGoal,bg_text:sv('pBgText'),note:sv('pNote'),actual_qty:totalActual,margin_rate:Math.round(avgMargin*10)/10,profit_per_unit:0,status,settings:{ship:nv('xShip'),freeT:nv('xFree'),comm:nv('xComm'),vat,incShip},updated_at:new Date().toISOString()}}
+function getBundleCalc(b){const ship=nv('xShip'),freeT=nv('xFree'),comm=nv('xComm');const cost=b.items.reduce((s,i)=>s+gc(i.pc)*(i.q||0),0);let dp=0,pf=0,mg=0;if(cost>0&&b.price>0){dp=b.special_price||Math.round(b.price*(1-(b.discount||0)/100));const iS=dp>=freeT,sh=incShip?(iS?ship:0):0,cm=dp*(comm/100);pf=dp-(cost+sh+cm);mg=dp>0?(pf/dp)*100:0}return{cost,dp,pf,mg}}
+function getPromoData(){const evName=sv('pEventName');if(!evName){alert('기획전명을 입력해주세요!');return null}const today=todayKST(),startD=sv('pStart'),endD=sv('pEnd');const hasActual=promoBundles.some(b=>b.actual_qty>0);let status='draft';if(hasActual)status='done';else if(startD&&startD<=today)status='active';const bundlesData=promoBundles.map(b=>{const c=getBundleCalc(b);return{name:b.name,items:b.items.filter(i=>i.pc).map(i=>({code:i.pc,name:gn(i.pc),qty:i.q,cost:gc(i.pc),msp:i.msp||0,mhp:i.mhp||0})),price:b.price,discount:b.discount||0,special_price:b.special_price||0,goal_qty:b.goal_qty||0,actual_qty:b.actual_qty||0,memo:b.memo||'',margin_rate:Math.round(c.mg*10)/10,profit_per_unit:Math.round(c.pf)}});const totalGoal=promoBundles.reduce((s,b)=>s+(b.goal_qty||0),0);const totalActual=promoBundles.reduce((s,b)=>s+(b.actual_qty||0),0);const avgMargin=bundlesData.length?bundlesData.reduce((s,b)=>s+b.margin_rate,0)/bundlesData.length:0;return{event_name:evName,channel:sv('pStore')||'스마트스토어',start_date:startD||null,end_date:endD||null,bundles:bundlesData,price:0,discount:0,goal_qty:totalGoal,bg_text:sv('pBgText'),note:sv('pNote'),actual_qty:totalActual,margin_rate:Math.round(avgMargin*10)/10,profit_per_unit:0,status,settings:{ship:nv('xShip'),freeT:nv('xFree'),comm:nv('xComm'),vat,incShip},updated_at:new Date().toISOString()}}
 async function savePromo(){const data=getPromoData();if(!data)return;const btn=document.querySelector('#pSaveSection .btn-primary');btn.disabled=true;btn.textContent='💾 저장 중...';try{if(editingPromoId){await sbFetch('promo_history?id=eq.'+editingPromoId,{method:'PATCH',body:JSON.stringify(data)});document.getElementById('pSaveMsg').textContent='✅ 업데이트 완료!'}else{const res=await sbFetch('promo_history',{method:'POST',body:JSON.stringify(data)});if(res&&res[0])editingPromoId=res[0].id;document.getElementById('pSaveMsg').textContent='✅ 저장 완료!'}renderPromoBundles();checkAlerts()}catch(e){document.getElementById('pSaveMsg').innerHTML='<span style="color:var(--red)">❌ '+e.message+'</span>'}btn.disabled=false;btn.textContent='💾 기획전 저장';setTimeout(()=>{document.getElementById('pSaveMsg').textContent=''},3000)}
-async function loadPromoById(id){try{const rows=await sbFetch('promo_history?id=eq.'+id);if(!rows||!rows.length)return;const r=rows[0];editingPromoId=r.id;document.getElementById('pEventName').value=r.event_name||'';document.getElementById('pStart').value=r.start_date||'';document.getElementById('pEnd').value=r.end_date||'';document.getElementById('pStore').value=r.channel||'네이버 스마트스토어';document.getElementById('pBgText').value=r.bg_text||'';document.getElementById('pNote').value=r.note||'';if(r.bundles&&r.bundles.length){promoBundles=r.bundles.map(b=>({name:b.name||'번들',items:(b.items||[]).map(i=>({pc:i.code,q:i.qty,msp:i.msp||0,mhp:i.mhp||0})),price:b.price||0,discount:b.discount||0,goal_qty:b.goal_qty||0,actual_qty:b.actual_qty||0,memo:b.memo||'',collapsed:false}))}else if(r.items&&r.items.length){promoBundles=[{name:'번들 A',items:r.items.map(i=>({pc:i.code,q:i.qty,msp:0,mhp:0})),price:r.price||0,discount:r.discount||0,goal_qty:r.goal_qty||0,actual_qty:r.actual_qty||0,memo:'',collapsed:false}]}switchTab('promo');renderPromoBundles()}catch(e){console.error('Load promo:',e)}}
-function clearPromoForm(){editingPromoId=null;['pEventName','pStart','pEnd','pBgText','pNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});document.getElementById('pStore').value='네이버 스마트스토어';promoBundles=[{name:'번들 A',items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false}];renderPromoBundles();document.getElementById('pSaveMsg').textContent=''}
+async function loadPromoById(id){try{const rows=await sbFetch('promo_history?id=eq.'+id);if(!rows||!rows.length)return;const r=rows[0];editingPromoId=r.id;document.getElementById('pEventName').value=r.event_name||'';document.getElementById('pStart').value=r.start_date||'';document.getElementById('pEnd').value=r.end_date||'';document.getElementById('pStore').value=r.channel||'네이버 스마트스토어';document.getElementById('pBgText').value=r.bg_text||'';document.getElementById('pNote').value=r.note||'';if(r.bundles&&r.bundles.length){promoBundles=r.bundles.map(b=>({name:b.name||'번들',items:(b.items||[]).map(i=>({pc:i.code,q:i.qty,msp:i.msp||0,mhp:i.mhp||0})),price:b.price||0,discount:b.discount||0,special_price:b.special_price||0,goal_qty:b.goal_qty||0,actual_qty:b.actual_qty||0,memo:b.memo||'',collapsed:false}))}else if(r.items&&r.items.length){promoBundles=[{name:'번들 A',items:r.items.map(i=>({pc:i.code,q:i.qty,msp:0,mhp:0})),price:r.price||0,discount:r.discount||0,goal_qty:r.goal_qty||0,actual_qty:r.actual_qty||0,memo:'',collapsed:false}]}switchTab('promo');renderPromoBundles()}catch(e){console.error('Load promo:',e)}}
+function clearPromoForm(){editingPromoId=null;['pEventName','pStart','pEnd','pBgText','pNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});document.getElementById('pStore').value='네이버 스마트스토어';promoBundles=[{name:'번들 A',items:[{pc:'',q:1,msp:0,mhp:0}],price:0,discount:0,special_price:0,goal_qty:0,actual_qty:0,memo:'',collapsed:false}];renderPromoBundles();document.getElementById('pSaveMsg').textContent=''}
 async function deletePromo(id){if(!confirm('정말 삭제할까요?'))return;try{await sbFetch('promo_history?id=eq.'+id,{method:'DELETE'});if(editingPromoId===id)clearPromoForm();renderHistory();checkAlerts()}catch(e){alert('삭제 실패: '+e.message)}}
 
 /* ═══ HISTORY ═══ */
